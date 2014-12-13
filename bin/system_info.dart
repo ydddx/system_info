@@ -1,15 +1,3 @@
-system_info
-=====
-
-Provides easy access to useful information about the system (architecture, bitness, kernel, operating system, CPU, user).
-
-Version: 0.0.1
-
-Warning! Not tested on Mac OS X!
-
-Example:
-
-```dart
 import "package:system_info/system_info.dart";
 
 void main() {
@@ -31,27 +19,3 @@ void main() {
     print("  Vendor: ${processor.vendor}");
   }
 }
-
-```
-
-Output:
-
-```
-Kernel architecture: AMD64
-Kernel bitness: 64
-Kernel name: Windows_NT
-Kernel version: 6.1.7601
-Operating system name: Microsoft Windows 7 Ultimate 
-Operating system version: 6.1.7601
-User directory: C:\Users\user
-User id: S-1-5-21-804019658-624049337-3525438850-1000
-User name: user
-User space bitness: 32
-Number of processors: 2
-  Name: AMD A4-3400 APU with Radeon(tm) HD Graphics
-  Socket: 0
-  Vendor: AuthenticAMD
-  Name: AMD A4-3400 APU with Radeon(tm) HD Graphics
-  Socket: 0
-  Vendor: AuthenticAMD
-```
