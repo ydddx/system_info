@@ -3,7 +3,7 @@ system_info
 
 Provides easy access to useful information about the system (architecture, bitness, kernel, operating system, CPU, user).
 
-Version: 0.0.1
+Version: 0.0.2
 
 Warning! Not tested on Mac OS X!
 
