@@ -49,15 +49,19 @@ Kernel name: Windows_NT
 Kernel version: 6.1.7601
 Operating system name: Microsoft Windows 7 Ultimate 
 Operating system version: 6.1.7601
+Physical memory free size: 1009 MB
+Physical memory total size: 3581 MB
 User directory: C:\Users\user
 User id: S-1-5-21-804019658-624049337-3525438850-1000
 User name: user
 User space bitness: 32
+Virtual memory free size: 997 MB
+Virtual memory total size: 4603 MB
 Number of processors: 2
   Name: AMD A4-3400 APU with Radeon(tm) HD Graphics
   Socket: 0
   Vendor: AuthenticAMD
   Name: AMD A4-3400 APU with Radeon(tm) HD Graphics
-  Socket: 0
+  Socket: 1
   Vendor: AuthenticAMD
 ```
