@@ -299,15 +299,18 @@ abstract class SysInfo {
         assert(processors.length != 0);
         return new UnmodifiableListView(processors);
       case "windows":
-        var data = _wmicGetValueAsMap("CPU", ["Manufacturer", "Name", "NumberOfCores"]);
-        var numberOfCores = int.parse(data["NumberOfCores"], onError: (e) => 0);
+        var groups = _wmicGetValueAsGroups("CPU", ["Architecture", "Manufacturer", "Name", "NumberOfCores"]);
+        var numberOfSockets = groups.length;
         var processors = <ProcessorInfo>[];
-        for (var i = 0; i < numberOfCores; i++) {
-          var name = data["Name"];
-          ;
-          var vendor = data["Manufacturer"];
-          var processor = new ProcessorInfo(name: name, socket: 0, vendor: vendor);
-          processors.add(processor);
+        for (var i = 0; i < numberOfSockets; i++) {
+          var data = groups[i];
+          var numberOfCores = int.parse(data["NumberOfCores"], onError: (e) => 0);
+          for (var socket = 0; socket < numberOfCores; socket++) {
+            var name = data["Name"];
+            var vendor = data["Manufacturer"];
+            var processor = new ProcessorInfo(name: name, socket: socket, vendor: vendor);
+            processors.add(processor);
+          }
         }
 
         assert(processors.length != 0);
