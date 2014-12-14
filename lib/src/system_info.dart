@@ -163,7 +163,7 @@ abstract class SysInfo {
         for (var line in file.readAsLinesSync()) {
           var index = line.indexOf("#");
           if (index != -1) {
-            line = line.substring(index);
+            line = line.substring(0, index);
             lines.add(line);
           }
         }
