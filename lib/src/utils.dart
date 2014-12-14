@@ -18,6 +18,12 @@ String _execAndTrim(String executable, List<String> arguments, {bool runInShell:
   return _trim(string);
 }
 
+List<Map<String, String>> _execAndTrimAsGroups(String executable, List<String> arguments, String separator, {bool runInShell: false}) {
+  var string = _execAndTrim(executable, arguments, runInShell: runInShell);
+  var lines = _stringToLines(string);
+  return _linesToGroups(lines, separator);
+}
+
 Map<String, String> _execAndTrimAsMap(String executable, List<String> arguments, String separator, {bool runInShell: false}) {
   var string = _execAndTrim(executable, arguments, runInShell: runInShell);
   return _stringToMap(string, separator);

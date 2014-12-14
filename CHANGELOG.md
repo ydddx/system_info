@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Partial support of `phycical memory` and `virtual memory` statistics
+
 ## 0.0.4
 
 - Fixed a bug when parsing comments in the file `/boot/config` on Linux

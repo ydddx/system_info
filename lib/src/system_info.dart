@@ -103,6 +103,38 @@ abstract class SysInfo {
    */
   static final int userSpaceBitness = _getUserSpaceBitness();
 
+  /**
+   * Returns the size of free physical memory.
+   *
+   *     print(SysInfo.physicalMemoryFreeSize);
+   *     => 3755331584
+   */
+  static int physicalMemoryFreeSize() => _getPhysicalMemoryFreeSize();
+
+  /**
+   * Returns the size of total physical memory.
+   *
+   *     print(SysInfo.physicalMemoryTotalSize);
+   *     => 3755331584
+   */
+  static int physicalMemoryTotalSize() => _getPhysicalMemoryTotalSize();
+
+  /**
+   * Returns the size of free virtual memory.
+   *
+   *     print(SysInfo.virtualMemoryFreeSize);
+   *     => 3755331584
+   */
+  static int virtualMemoryFreeSize() => _getVirtualMemoryFreeSize();
+
+  /**
+   * Returns the size of total virtual memory.
+   *
+   *     print(SysInfo.virtualMemoryTotalSize);
+   *     => 3755331584
+   */
+  static int virtualMemoryTotalSize() => _getVirtualMemoryTotalSize();
+
   static final Map<String, String> _environment = Platform.environment;
 
   static final String _operatingSystem = Platform.operatingSystem;
@@ -266,32 +298,68 @@ abstract class SysInfo {
     return null;
   }
 
+  static int _getPhysicalMemoryFreeSize() {
+    switch (_operatingSystem) {
+      case "android":
+      case "linux":
+        var data = _execAndTrimAsMap("cat", ["/proc/meminfo"], ":");
+        return int.parse(_trim(data["MemFree"]).split(" ").first, onError: (e) => 0) * 1024;
+      case "macos":
+        // TODO:
+        return 0;
+      case "windows":
+        var data = _wmicGetValueAsMap("OS", ["FreePhysicalMemory"]);
+        return int.parse(data["FreePhysicalMemory"], onError: (e) => 0) * 1024;
+      default:
+        _error();
+    }
+
+    return null;
+  }
+
+  static int _getPhysicalMemoryTotalSize() {
+    switch (_operatingSystem) {
+      case "android":
+      case "linux":
+        var data = _execAndTrimAsMap("cat", ["/proc/meminfo"], ":");
+        return int.parse(_trim(data["MemTotal"]).split(" ").first, onError: (e) => 0) * 1024;
+      case "macos":
+        var pageSize = int.parse(_execAndTrim("sysctl", ["-n", "hw.pagesize"]), onError: (e) => 0);
+        var size = int.parse(_execAndTrim("sysctl", ["-n", "hw.memsize"]), onError: (e) => 0);
+        return size * pageSize;
+      case "windows":
+        var data = _wmicGetValueAsMap("ComputerSystem", ["TotalPhysicalMemory"]);
+        return int.parse(data["TotalPhysicalMemory"], onError: (e) => 0);
+      default:
+        _error();
+    }
+
+    return null;
+  }
+
   static List<ProcessorInfo> _getProcessors() {
     switch (_operatingSystem) {
       case "android":
       case "linux":
         var processors = <ProcessorInfo>[];
-        var file = new File("/proc/cpuinfo");
-        if (file.existsSync()) {
-          var groups = _linesToGroups(file.readAsLinesSync(), ":");
-          for (var group in groups) {
-            var name = _trim(group["model name"]);
-            var socket = int.parse(_trim(group["physical id"]), onError: (e) => 0);
-            var vendor = _trim(group["vendor_id"]);
-            var processor = new ProcessorInfo(name: name, socket: socket, vendor: vendor);
-            processors.add(processor);
-          }
+        var groups = _execAndTrimAsGroups("cat", ["/proc/cpuinfo"], ":");
+        for (var group in groups) {
+          var name = _trim(group["model name"]);
+          var socket = int.parse(_trim(group["physical id"]), onError: (e) => 0);
+          var vendor = _trim(group["vendor_id"]);
+          var processor = new ProcessorInfo(name: name, socket: socket, vendor: vendor);
+          processors.add(processor);
         }
 
         assert(processors.length != 0);
         return new UnmodifiableListView(processors);
       case "macos":
-        var data = _execAndTrimAsMap("sysctl", ["-a", "machdep.cpu"], ":");
-        var numberOfCores = int.parse(data["core_count"], onError: (e) => 0);
+        var data = _execAndTrimAsMap("sysctl", ["machdep.cpu"], ":");
+        var numberOfCores = int.parse(data["machdep.cpu.core_count"], onError: (e) => 0);
         var processors = <ProcessorInfo>[];
         for (var i = 0; i < numberOfCores; i++) {
-          var name = data["brand_string"];
-          var vendor = data["vendor"];
+          var name = data["machdep.cpu.brand_string"];
+          var vendor = data["machdep.cpu.vendor"];
           var processor = new ProcessorInfo(name: name, socket: 0, vendor: vendor);
           processors.add(processor);
         }
@@ -381,6 +449,48 @@ abstract class SysInfo {
         }
 
         return result;
+      default:
+        _error();
+    }
+
+    return null;
+  }
+
+  static int _getVirtualMemoryFreeSize() {
+    switch (_operatingSystem) {
+      case "android":
+      case "linux":
+        var data = _execAndTrimAsMap("cat", ["/proc/meminfo"], ":");
+        var physical = int.parse(_trim(data["MemFree"]).split(" ").first, onError: (e) => 0);
+        var swap = int.parse(_trim(data["SwapFree"]).split(" ").first, onError: (e) => 0);
+        return (physical + swap) * 1024;
+      case "macos":
+        // TODO:
+        return 0;
+      case "windows":
+        var data = _wmicGetValueAsMap("OS", ["FreeVirtualMemory"]);
+        return int.parse(data["FreeVirtualMemory"], onError: (e) => 0) * 1024;
+      default:
+        _error();
+    }
+
+    return null;
+  }
+
+  static int _getVirtualMemoryTotalSize() {
+    switch (_operatingSystem) {
+      case "android":
+      case "linux":
+        var data = _execAndTrimAsMap("cat", ["/proc/meminfo"], ":");
+        var physical = int.parse(_trim(data["MemTotal"]).split(" ").first, onError: (e) => 0);
+        var swap = int.parse(_trim(data["SwapTotal"]).split(" ").first, onError: (e) => 0);
+        return (physical + swap) * 1024;
+      case "macos":
+        // TODO:
+        return 0;
+      case "windows":
+        var data = _wmicGetValueAsMap("OS", ["TotalVirtualMemorySize"]);
+        return int.parse(data["TotalVirtualMemorySize"], onError: (e) => 0) * 1024;
       default:
         _error();
     }
