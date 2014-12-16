@@ -29,18 +29,33 @@ Map<String, String> _execAndTrimAsMap(String executable, List<String> arguments,
   return _stringToMap(string, separator);
 }
 
-Map<String, String> _linesToMap(List<String> lines, String separtor) {
-  var result = <String, String>{};
-  for (var line in lines) {
-    var index = line.indexOf(separtor);
-    if (index != -1) {
-      var key = line.substring(0, index).trimRight();
-      var value = line.substring(index + 1).trimLeft();
-      result[key] = value;
-    }
+String _getByIndex(List<String> list, int index, [String defaultValue]) {
+  if (list == null) {
+    return defaultValue;
   }
 
-  return result;
+  if (index >= list.length) {
+    return defaultValue;
+  }
+
+  return list[index];
+}
+
+int _getByIndexAsInt(List<String> list, int index, [int defaultValue]) {
+  if (list == null) {
+    return defaultValue;
+  }
+
+  if (index >= list.length) {
+    return defaultValue;
+  }
+
+  var value = list[index];
+  if (value == null) {
+    return defaultValue;
+  }
+
+  return int.parse(value, onError: (e) => defaultValue);
 }
 
 List<Map<String, String>> _linesToGroups(List<String> lines, String separtor) {
@@ -62,6 +77,68 @@ List<Map<String, String>> _linesToGroups(List<String> lines, String separtor) {
   }
 
   return result;
+}
+
+Map<String, String> _linesToMap(List<String> lines, String separtor) {
+  var result = <String, String>{};
+  for (var line in lines) {
+    var index = line.indexOf(separtor);
+    if (index != -1) {
+      var key = line.substring(0, index).trimRight();
+      var value = line.substring(index + 1).trimLeft();
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+Map<String, List<String>> _linesToTable(List<String> lines, List<String> parseColumns(String line), List<String> parseRow(String line)) {
+  var result = <String, List<String>>{};
+  List<String> columns;
+  var length = lines.length;
+  if (length > 0) {
+    columns = parseColumns(lines[0]);
+    for (var name in columns) {
+      result[name] = new List<String>(columns.length);
+    }
+  }
+
+  for (var i = 1; i < length; i++) {
+    var row = new List<String>(columns.length);
+    var cells = parseColumns(lines[i]);
+    for (var j = 0; j < columns.length && j < cells.length; j++) {
+      row = cells[i];
+    }
+  }
+
+  return result;
+}
+
+String _reduceSpaces(String string) {
+  string = _trim(string);
+  var sb = new StringBuffer();
+  var length = string.length;
+  var skip = false;
+  for (var i = 0; i < length; i++) {
+    var current = string[i];
+    switch (current) {
+      case " ":
+      case "\t":
+        if (!skip) {
+          sb.write(" ");
+          skip = true;
+        }
+
+        break;
+      default:
+        sb.write(current);
+        skip = false;
+        break;
+    }
+  }
+
+  return sb.toString();
 }
 
 List<String> _stringToLines(String string, [bool noEmpty = false]) {

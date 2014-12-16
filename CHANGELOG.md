@@ -1,3 +1,10 @@
+## 0.0.6
+
+- Renamed method `physicalMemoryFreeSize()` to `getFreePhysicalMemory()`
+- Renamed method `physicalMemoryTotalSize()` to `getTotalPhysicalMemory()`
+- Renamed method `virtualMemoryFreeSize()` to `getFreeVirtualMemory()`
+- Renamed method `virtualMemoryTotalSize()` to `getTotalVirtualMemory()`
+
 ## 0.0.5
 
 - Partial support of `phycical memory` and `virtual memory` statistics
