@@ -7,7 +7,21 @@ Version: 0.0.6
 
 Warning! Not tested on Mac OS X!
 
-Example:
+**Basic examples:**
+
+```dart
+if (SysInfo.operatingSystemName == "Ubuntu") {
+  log.info("We love Ubuntu users");
+}
+```
+
+```dart
+if (SysInfo.userSpaceBitness == 32) {
+  log.info("Dart VM runs as a 32-bit process");
+}
+```
+
+**Common information:**
 
 ```dart
 import "package:system_info/system_info.dart";
