@@ -236,28 +236,34 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var kernel = _fluent(_exec("uname", ["-r"])).trim().stringValue;
-        var file = new File("/boot/config-$kernel");
-        if (!file.existsSync()) {
-          _error();
+        if (userSpaceBitness == 64) {
+          return 64;
         }
 
-        var lines = <String>[];
-        for (var line in file.readAsLinesSync()) {
-          var index = line.indexOf("#");
-          if (index != -1) {
-            line = line.substring(0, index);
-            lines.add(line);
+        var paths = <String>[];
+        _parseLdConf("/etc/ld.so.conf", paths, new Set<String>());
+        for (var path in paths) {
+          var files = FileUtils.glob(pathos.join(path, "libc.so.*"));
+          for (var filePath in files) {
+            while (true) {
+              if (FileUtils.testfile(filePath, "link")) {
+                filePath = new Link(filePath).resolveSymbolicLinksSync();
+              } else {
+                break;
+              }
+            }
+
+            var file = new File(filePath);
+            if (file.existsSync()) {
+              var fileType = _fluent(_exec("file", ["-b", file.path])).trim().stringValue;
+              if (fileType.startsWith("ELF 64-bit")) {
+                return 64;
+              }
+            }
           }
         }
 
-        var data = _fluent(lines).listToMap("=").mapValue;
-        var result = userSpaceBitness;
-        if (data["CONFIG_64BIT"].toString() == "y") {
-          result = 64;
-        }
-
-        return result;
+        return 32;
       case "macos":
         var result = 32;
         if (_fluent(_exec("uname", ["-m"])).trim() == "x86_64") {

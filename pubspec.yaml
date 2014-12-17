@@ -1,7 +1,10 @@
 name: system_info
-version: 0.0.7
+version: 0.0.8
 author: Andrew Mezoni <andrew.mezoni@gmail.com>
 description: Provides easy access to useful information about the system (architecture, bitness, kernel, operating system, CPU, user).
 homepage: https://github.com/mezoni/system_info
+dependencies:
+  file_utils: any
+  path: any
 dev_dependencies:
   build_tools: any
