@@ -3,9 +3,10 @@ system_info
 
 Provides easy access to useful information about the system (architecture, bitness, kernel, operating system, CPU, user).
 
-Version: 0.0.6
+Version: 0.0.7
 
 Warning! Not tested on Mac OS X!
+Warning! Not tested on Linux ARM!
 
 **Basic examples:**
 
@@ -42,6 +43,7 @@ void main() {
   var processors = SysInfo.processors;
   print("Number of processors    : ${processors.length}");
   for (var processor in processors) {
+    print("  Architecture          : ${processor.architecture}");
     print("  Name                  : ${processor.name}");
     print("  Socket                : ${processor.socket}");
     print("  Vendor                : ${processor.vendor}");
@@ -68,14 +70,16 @@ User id                 : 1000
 User name               : andrew
 User space bitness      : 32
 Number of processors    : 2
+  Architecture          : X86_64
   Name                  : AMD Athlon(tm) II X2 240 Processor
   Socket                : 0
   Vendor                : AuthenticAMD
+  Architecture          : X86_64
   Name                  : AMD Athlon(tm) II X2 240 Processor
   Socket                : 0
   Vendor                : AuthenticAMD
 Total physical memory   : 3782 MB
-Free physical memory    : 190 MB
+Free physical memory    : 385 MB
 Total virtual memory    : 7651 MB
-Free virtual memory     : 4059 MB
+Free virtual memory     : 4249 MB
 ```

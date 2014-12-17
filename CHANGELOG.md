@@ -1,3 +1,7 @@
+## 0.0.7
+
+- Partial support of `processor architecture` statistics
+
 ## 0.0.6
 
 - Renamed method `physicalMemoryFreeSize()` to `getFreePhysicalMemory()`

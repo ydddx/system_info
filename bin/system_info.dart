@@ -16,6 +16,7 @@ void main() {
   var processors = SysInfo.processors;
   print("Number of processors    : ${processors.length}");
   for (var processor in processors) {
+    print("  Architecture          : ${processor.architecture}");
     print("  Name                  : ${processor.name}");
     print("  Socket                : ${processor.socket}");
     print("  Vendor                : ${processor.vendor}");
