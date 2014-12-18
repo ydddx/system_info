@@ -241,16 +241,19 @@ abstract class SysInfo {
         }
 
         var paths = <String>[];
-        _parseLdConf("/etc/ld.so.conf", paths, new Set<String>());
+        var path = _resolveLink("/etc/ld.so.conf");
+        if (path != null) {
+          _parseLdConf(path, paths, new Set<String>());
+        }
+
+        paths.add("/lib");
+        paths.add("/lib64");
         for (var path in paths) {
           var files = FileUtils.glob(pathos.join(path, "libc.so.*"));
           for (var filePath in files) {
-            while (true) {
-              if (FileUtils.testfile(filePath, "link")) {
-                filePath = new Link(filePath).resolveSymbolicLinksSync();
-              } else {
-                break;
-              }
+            filePath = _resolveLink(filePath);
+            if (filePath == null) {
+              continue;
             }
 
             var file = new File(filePath);

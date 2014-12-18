@@ -13,7 +13,28 @@ String _exec(String executable, List<String> arguments, {bool runInShell: false}
   return null;
 }
 
+String _resolveLink(String path) {
+  while (true) {
+    if (!FileUtils.testfile(path, "link")) {
+      break;
+    }
+
+    try {
+      path = new Link(path).resolveSymbolicLinksSync();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  return path;
+}
+
 void _parseLdConf(String path, List<String> paths, Set<String> processed) {
+  path = _resolveLink(path);
+  if (path == null) {
+    return;
+  }
+
   var file = new File(path);
   if (!file.existsSync()) {
     return;
