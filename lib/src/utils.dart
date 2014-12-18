@@ -19,6 +19,7 @@ void _parseLdConf(String path, List<String> paths, Set<String> processed) {
     return;
   }
 
+  var dir = FileUtils.dirname(path);
   for (var line in file.readAsLinesSync()) {
     line = line.trim();
     var index = line.indexOf("#");
@@ -26,20 +27,29 @@ void _parseLdConf(String path, List<String> paths, Set<String> processed) {
       line = line.substring(0, index);
     }
 
-    if (!line.isEmpty) {
-      if (line.startsWith("include ")) {
-        var s = FileUtils.glob(line.substring(8));
-        for (var path in FileUtils.glob(line.substring(8))) {
-          if (!processed.contains(path)) {
-            processed.add(path);
-            _parseLdConf(path, paths, processed);
-          }
+    if (line.isEmpty) {
+      continue;
+    }
 
+    var include = false;
+    if (line.startsWith("include ")) {
+      line = line.substring(8);
+      include = true;
+    }
+
+    if (pathos.isRelative(line)) {
+      line = pathos.join(dir, line);
+    }
+
+    if (include) {
+      for (var path in FileUtils.glob(line)) {
+        if (!processed.contains(path)) {
+          processed.add(path);
+          _parseLdConf(path, paths, processed);
         }
-
-      } else {
-        paths.add(line);
       }
+    } else {
+      paths.add(line);
     }
   }
 }

@@ -1,3 +1,7 @@
+## 0.0.9
+
+- Fixed bug in detection of `bitness of kernel` on Linux
+
 ## 0.0.8
 
 - Detection of `bitness of kernel` on Linux are based on the found file formats of `libc.so.*`
