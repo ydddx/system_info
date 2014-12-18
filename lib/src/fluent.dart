@@ -85,6 +85,16 @@ class _Fluent {
     return this;
   }
 
+  _Fluent last() {
+    if (value is Iterable) {
+      value = value.last;
+    } else {
+      value = null;
+    }
+
+    return this;
+  }
+
   _Fluent listToGroups(String separator) {
     var result = <Map<String, String>>[];
     if (value is! List<Map<String, String>>) {

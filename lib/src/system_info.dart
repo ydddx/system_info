@@ -173,8 +173,7 @@ abstract class SysInfo {
         var value = _fluent(data["MemFree"]).split(" ").elementAt(0).parseInt().intValue;
         return value * 1024;
       case "macos":
-        // TODO:
-        return 0;
+        return getFreeVirtualMemory();
       case "windows":
         var data = _wmicGetValueAsMap("OS", ["FreePhysicalMemory"]);
         var value = _fluent(data["FreePhysicalMemory"]).parseInt().intValue;
@@ -268,21 +267,19 @@ abstract class SysInfo {
 
         return 32;
       case "macos":
-        var result = 32;
         if (_fluent(_exec("uname", ["-m"])).trim() == "x86_64") {
-          result = 64;
+          return 64;
         }
 
-        return result;
+        return 32;
       case "windows":
-        var result = 32;
         var architecture = _environment["PROCESSOR_ARCHITECTURE"];
         var wow64 = _environment["PROCESSOR_ARCHITEW6432"];
         if (architecture == "AMD64" || wow64 == "AMD64") {
-          result = 64;
+          return 64;
         }
 
-        return result;
+        return 32;
       default:
         _error();
     }
@@ -297,7 +294,7 @@ abstract class SysInfo {
       case "macos":
         return _fluent(_exec("uname", ["-s"])).trim().stringValue;
       case "windows":
-        return _environment["OS"];
+        return _fluent(_environment["OS"]).stringValue;
       default:
         _error();
     }
@@ -514,8 +511,14 @@ abstract class SysInfo {
         var swap = _fluent(data["SwapTotal"]).split(" ").elementAt(0).parseInt().intValue;
         return (physical + swap) * 1024;
       case "macos":
-        // TODO:
-        return 0;
+        var data = _fluent(_exec("vm_stat", [])).trim().stringToMap(":").mapValue;
+        var free = _fluent(data["Pages free"]).replaceAll(".", "").parseInt().intValue;
+        var active = _fluent(data["Pages active"]).replaceAll(".", "").parseInt().intValue;
+        var inactive = _fluent(data["Pages inactive"]).replaceAll(".", "").parseInt().intValue;
+        var speculative = _fluent(data["Pages speculative"]).replaceAll(".", "").parseInt().intValue;
+        var wired = _fluent(data["Pages wired down"]).replaceAll(".", "").parseInt().intValue;
+        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"])).trim().parseInt().intValue;
+        return (free + active + inactive + speculative + wired) * pageSize;
       case "windows":
         var data = _wmicGetValueAsMap("OS", ["TotalVirtualMemorySize"]);
         var value = _fluent(data["TotalVirtualMemorySize"]).parseInt().intValue;
@@ -532,9 +535,9 @@ abstract class SysInfo {
       case "android":
       case "linux":
       case "macos":
-        return _environment["HOME"];
+        return _fluent(_environment["HOME"]).stringValue;
       case "windows":
-        return _environment["USERPROFILE"];
+        return _fluent(_environment["USERPROFILE"]).stringValue;
       default:
         _error();
     }
@@ -565,7 +568,8 @@ abstract class SysInfo {
       case "macos":
         return _fluent(_exec("whoami", [])).trim().stringValue;
       case "windows":
-        return _environment["USERNAME"];
+        var data = _wmicGetValueAsMap("ComputerSystem", ["UserName"]);
+        return _fluent(data["UserName"]).split("\\").last().stringValue;
       default:
         _error();
     }
@@ -580,12 +584,11 @@ abstract class SysInfo {
       case "macos":
         return _fluent(_exec("getconf", ["LONG_BIT"])).trim().parseInt().intValue;
       case "windows":
-        var result = 32;
         if (_environment["PROCESSOR_ARCHITECTURE"] == "AMD64") {
-          result = 64;
+          return 64;
         }
 
-        return result;
+        return 32;
       default:
         _error();
     }

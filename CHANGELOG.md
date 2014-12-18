@@ -1,3 +1,7 @@
+## 0.0.10
+
+- Implemented `getFreePhysicalMemory()` and `getTotalVirtualMemory()` on Mac OS X.
+
 ## 0.0.9
 
 - Fixed bug in detection of `bitness of kernel` on Linux
