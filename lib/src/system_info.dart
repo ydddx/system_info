@@ -216,14 +216,12 @@ abstract class SysInfo {
       case "macos":
         return _fluent(_exec("uname", ["-m"])).trim().stringValue;
       case "windows":
-        var architecture = _environment["PROCESSOR_ARCHITECTURE"];
-        var wow64 = _environment["PROCESSOR_ARCHITEW6432"];
-        var result = "x86";
-        if (architecture == "AMD64" || wow64 == "AMD64") {
-          result = "AMD64";
+        var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
+        if (!wow64.isEmpty) {
+          return wow64;
         }
 
-        return result;
+        return _fluent(_environment["PROCESSOR_ARCHITECTURE"]).stringValue;
       default:
         _error();
     }
@@ -273,10 +271,15 @@ abstract class SysInfo {
 
         return 32;
       case "windows":
-        var architecture = _environment["PROCESSOR_ARCHITECTURE"];
-        var wow64 = _environment["PROCESSOR_ARCHITEW6432"];
-        if (architecture == "AMD64" || wow64 == "AMD64") {
+        var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
+        if (!wow64.isEmpty) {
           return 64;
+        }
+
+        switch (_environment["PROCESSOR_ARCHITECTURE"]) {
+          case "AMD64":
+          case "IA64":
+            return 64;
         }
 
         return 32;
@@ -584,8 +587,15 @@ abstract class SysInfo {
       case "macos":
         return _fluent(_exec("getconf", ["LONG_BIT"])).trim().parseInt().intValue;
       case "windows":
-        if (_environment["PROCESSOR_ARCHITECTURE"] == "AMD64") {
-          return 64;
+        var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
+        if (!wow64.isEmpty) {
+          return 32;
+        }
+
+        switch (_environment["PROCESSOR_ARCHITECTURE"]) {
+          case "AMD64":
+          case "IA64":
+            return 64;
         }
 
         return 32;
