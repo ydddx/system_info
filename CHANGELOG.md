@@ -1,6 +1,6 @@
 ## 0.0.11
 
-- Fixed bug in detection of `kernel architecture` on Windows. More universal algorithm independent from the architecture name, allows detect any architecture (AMD64/ IA64/ etc)
+- Fixed bug in detection of `kernel architecture` on Windows. More universal algorithm independent from the architecture name, allows detect any architecture (X86/ AMD64/ IA64/ etc)
 - Impoved detection of `bitness of kernel` on Windows. Added suport of `IA64`
 - Impoved detection of `bitness of user space` on Windows. Added suport of `IA64`
 

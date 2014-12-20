@@ -10,6 +10,6 @@
 0.0.8 Detection of `bitness of kernel` on Linux are based on the found file formats of `libc.so.*`
 0.0.9 Fixed bug in detection of `bitness of kernel` on Linux
 0.0.10 Implemented `getFreePhysicalMemory()` and `getTotalVirtualMemory()` on Mac OS X.
-0.0.11 Fixed bug in detection of `kernel architecture` on Windows. More universal algorithm independent from the architecture name, allows detect any architecture (AMD64/ IA64/ etc)
+0.0.11 Fixed bug in detection of `kernel architecture` on Windows. More universal algorithm independent from the architecture name, allows detect any architecture (X86/ AMD64/ IA64/ etc)
 0.0.11 Impoved detection of `bitness of kernel` on Windows. Added suport of `IA64`
 0.0.11 Impoved detection of `bitness of user space` on Windows. Added suport of `IA64`
