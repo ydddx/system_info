@@ -1,9 +1,9 @@
 part of system_info;
 
 class ProcessorArchitecture {
-  static const ProcessorArchitecture ARM = const ProcessorArchitecture("ARM");
-
   static const ProcessorArchitecture AARCH64 = const ProcessorArchitecture("AARCH64");
+
+  static const ProcessorArchitecture ARM = const ProcessorArchitecture("ARM");
 
   static const ProcessorArchitecture IA64 = const ProcessorArchitecture("IA64");
 
@@ -35,8 +35,6 @@ class ProcessorInfo {
 }
 
 abstract class SysInfo {
-  SysInfo._internal();
-
   /**
    * Returns the architecture of the kernel.
    *
@@ -125,6 +123,12 @@ abstract class SysInfo {
    */
   static final int userSpaceBitness = _getUserSpaceBitness();
 
+  static final Map<String, String> _environment = Platform.environment;
+
+  static final String _operatingSystem = Platform.operatingSystem;
+
+  SysInfo._internal();
+
   /**
    * Returns the amount of free physical memory in bytes.
    *
@@ -156,10 +160,6 @@ abstract class SysInfo {
    *     => 3755331584
    */
   static int getTotalVirtualMemory() => _getTotalVirtualMemory();
-
-  static final Map<String, String> _environment = Platform.environment;
-
-  static final String _operatingSystem = Platform.operatingSystem;
 
   static ProcessorInfo _createUnknownProcessor() {
     return new ProcessorInfo(architecture: ProcessorArchitecture.UNKNOWN);
