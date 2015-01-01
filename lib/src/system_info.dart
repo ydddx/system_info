@@ -3,7 +3,7 @@ part of system_info;
 class ProcessorArchitecture {
   static const ProcessorArchitecture ARM = const ProcessorArchitecture("ARM");
 
-  static const ProcessorArchitecture ARM64 = const ProcessorArchitecture("ARM64");
+  static const ProcessorArchitecture AARC64 = const ProcessorArchitecture("AARC64");
 
   static const ProcessorArchitecture IA64 = const ProcessorArchitecture("IA64");
 
@@ -160,6 +160,10 @@ abstract class SysInfo {
   static final Map<String, String> _environment = Platform.environment;
 
   static final String _operatingSystem = Platform.operatingSystem;
+
+  static ProcessorInfo _createUnknownProcessor() {
+    return new ProcessorInfo(architecture: ProcessorArchitecture.UNKNOWN);
+  }
 
   static dynamic _error() {
     throw new UnsupportedError("Unsupported operating system.");
@@ -399,7 +403,7 @@ abstract class SysInfo {
             architecture = ProcessorArchitecture.ARM;
             var features = _fluent(group["Features"]).split(" ").listValue;
             if (features.contains("fp")) {
-              architecture = ProcessorArchitecture.ARM64;
+              architecture = ProcessorArchitecture.AARC64;
             }
 
           } else if (name.startsWith("MIPS")) {
@@ -410,7 +414,10 @@ abstract class SysInfo {
           processors.add(processor);
         }
 
-        assert(processors.length != 0);
+        if(processors.length == 0) {
+          processors.add(_createUnknownProcessor());
+        }
+
         return new UnmodifiableListView(processors);
       case "macos":
         var data = _fluent(_exec("sysctl", ["machdep.cpu"])).trim().stringToMap(":").mapValue;
@@ -432,7 +439,10 @@ abstract class SysInfo {
           processors.add(processor);
         }
 
-        assert(processors.length != 0);
+        if(processors.length == 0) {
+          processors.add(_createUnknownProcessor());
+        }
+
         return new UnmodifiableListView(processors);
       case "windows":
         var groups = _wmicGetValueAsGroups("CPU", ["Architecture", "DataWidth", "Manufacturer", "Name", "NumberOfCores"]);
@@ -455,7 +465,7 @@ abstract class SysInfo {
                   architecture = ProcessorArchitecture.ARM;
                   break;
                 case 64:
-                  architecture = ProcessorArchitecture.ARM64;
+                  architecture = ProcessorArchitecture.AARC64;
                   break;
               }
 
@@ -473,7 +483,10 @@ abstract class SysInfo {
           }
         }
 
-        assert(processors.length != 0);
+        if(processors.length == 0) {
+          processors.add(_createUnknownProcessor());
+        }
+
         return new UnmodifiableListView(processors);
       default:
         _error();

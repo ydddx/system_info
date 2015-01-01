@@ -1,3 +1,7 @@
+## 0.0.12
+
+- Breaking change, `ProcessorArchitecture.ARM64` renamed to `ProcessorArchitecture.AARC64`
+
 ## 0.0.11
 
 - Fixed bug in detection of `kernel architecture` on Windows. More universal algorithm independent from the architecture name, allows detect any architecture (X86/ AMD64/ IA64/ etc)
