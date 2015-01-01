@@ -1,6 +1,6 @@
 ## 0.0.12
 
-- Breaking change, `ProcessorArchitecture.ARM64` renamed to `ProcessorArchitecture.AARC64`
+- Breaking change, `ProcessorArchitecture.ARM64` renamed to `ProcessorArchitecture.AARCH64`
 
 ## 0.0.11
 

@@ -3,7 +3,7 @@ part of system_info;
 class ProcessorArchitecture {
   static const ProcessorArchitecture ARM = const ProcessorArchitecture("ARM");
 
-  static const ProcessorArchitecture AARC64 = const ProcessorArchitecture("AARC64");
+  static const ProcessorArchitecture AARCH64 = const ProcessorArchitecture("AARCH64");
 
   static const ProcessorArchitecture IA64 = const ProcessorArchitecture("IA64");
 
@@ -403,7 +403,7 @@ abstract class SysInfo {
             architecture = ProcessorArchitecture.ARM;
             var features = _fluent(group["Features"]).split(" ").listValue;
             if (features.contains("fp")) {
-              architecture = ProcessorArchitecture.AARC64;
+              architecture = ProcessorArchitecture.AARCH64;
             }
 
           } else if (name.startsWith("MIPS")) {
@@ -465,7 +465,7 @@ abstract class SysInfo {
                   architecture = ProcessorArchitecture.ARM;
                   break;
                 case 64:
-                  architecture = ProcessorArchitecture.AARC64;
+                  architecture = ProcessorArchitecture.AARCH64;
                   break;
               }
 
