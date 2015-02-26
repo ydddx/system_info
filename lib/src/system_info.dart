@@ -161,6 +161,14 @@ abstract class SysInfo {
    */
   static int getTotalVirtualMemory() => _getTotalVirtualMemory();
 
+  /**
+   * Returns the amount of virtual memory in bytes used by the proccess.
+   *
+   *     print(SysInfo.getVirtualMemorySize());
+   *     => 123456
+   */
+  static int getVirtualMemorySize() => _getVirtualMemorySize();
+
   static ProcessorInfo _createUnknownProcessor() {
     return new ProcessorInfo(architecture: ProcessorArchitecture.UNKNOWN);
   }
@@ -522,7 +530,6 @@ abstract class SysInfo {
       case "android":
       case "linux":
         var data = _fluent(_exec("cat", ["/proc/meminfo"])).trim().stringToMap(":").mapValue;
-        _fluent(data["MemTotal"]).split(" ").elementAt(0).parseInt().intValue;
         var physical = _fluent(data["MemTotal"]).split(" ").elementAt(0).parseInt().intValue;
         var swap = _fluent(data["SwapTotal"]).split(" ").elementAt(0).parseInt().intValue;
         return (physical + swap) * 1024;
@@ -614,6 +621,25 @@ abstract class SysInfo {
         return 32;
       default:
         _error();
+    }
+
+    return null;
+  }
+
+  static int _getVirtualMemorySize() {
+    switch (_operatingSystem) {
+      case "android":
+      case "linux":
+      case "macos":
+        var data = _fluent(_exec("ps", ["-o", "vsz", "-p", "$pid"])).trim().stringToList().listValue;
+        var size = _fluent(data.elementAt(1)).parseInt().intValue;
+        return size * 1024;
+      case "windows":
+        var data = _wmicGetValueAsMap("Process", ["VirtualSize"], where: ["Handle=\"$pid\""]);
+        var value = _fluent(data["VirtualSize"]).parseInt().intValue;
+        return value;
+      default:
+         _error();
     }
 
     return null;

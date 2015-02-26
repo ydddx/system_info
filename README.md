@@ -3,7 +3,7 @@ system_info
 
 Provides easy access to useful information about the system (architecture, bitness, kernel, operating system, CPU, user).
 
-Version: 0.0.12
+Version: 0.0.14
 
 Warning! Not tested on Mac OS X!
 Warning! Not tested on Linux ARM!
@@ -52,6 +52,7 @@ void main() {
   print("Free physical memory    : ${SysInfo.getFreePhysicalMemory() ~/ MEGABYTE} MB");
   print("Total virtual memory    : ${SysInfo.getTotalVirtualMemory() ~/ MEGABYTE} MB");
   print("Free virtual memory     : ${SysInfo.getFreeVirtualMemory() ~/ MEGABYTE} MB");
+  print("Virtual memory size     : ${SysInfo.getVirtualMemorySize() ~/ MEGABYTE} MB");
 }
 
 ```

@@ -25,4 +25,5 @@ void main() {
   print("Free physical memory    : ${SysInfo.getFreePhysicalMemory() ~/ MEGABYTE} MB");
   print("Total virtual memory    : ${SysInfo.getTotalVirtualMemory() ~/ MEGABYTE} MB");
   print("Free virtual memory     : ${SysInfo.getFreeVirtualMemory() ~/ MEGABYTE} MB");
+  print("Virtual memory size     : ${SysInfo.getVirtualMemorySize() ~/ MEGABYTE} MB");
 }

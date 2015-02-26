@@ -1,3 +1,7 @@
+## 0.0.14
+
+- Added statistics `getVirtualMemorySize()` about the current memory usage by the current process
+
 ## 0.0.12
 
 - Breaking change, `ProcessorArchitecture.ARM64` renamed to `ProcessorArchitecture.AARCH64`
@@ -10,7 +14,7 @@
 
 ## 0.0.10
 
-- Implemented `getFreePhysicalMemory()` and `getTotalVirtualMemory()` on Mac OS X.
+- Implemented `getFreePhysicalMemory()` and `getTotalVirtualMemory()` on Mac OS X
 
 ## 0.0.9
 
