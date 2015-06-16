@@ -277,7 +277,7 @@ abstract class SysInfo {
 
         return 32;
       case "macos":
-        if (_fluent(_exec("uname", ["-m"])).trim() == "x86_64") {
+        if (_fluent(_exec("uname", ["-m"])).trim().stringValue == "x86_64") {
           return 64;
         }
 
