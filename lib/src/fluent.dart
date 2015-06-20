@@ -77,7 +77,6 @@ class _Fluent {
       if (result.exitCode == 0) {
         value = result.stdout.toString();
       }
-
     } catch (e) {
       value = null;
     }

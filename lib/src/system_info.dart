@@ -395,7 +395,6 @@ abstract class SysInfo {
             if (flags.contains("lm")) {
               architecture = ProcessorArchitecture.X86_64;
             }
-
           } else if (name.startsWith("Intel")) {
             architecture = ProcessorArchitecture.X86;
             var flags = _fluent(group["flags"]).split(" ").listValue;
@@ -406,14 +405,12 @@ abstract class SysInfo {
             if (flags.contains("ia64")) {
               architecture = ProcessorArchitecture.IA64;
             }
-
           } else if (name.startsWith("ARM")) {
             architecture = ProcessorArchitecture.ARM;
             var features = _fluent(group["Features"]).split(" ").listValue;
             if (features.contains("fp")) {
               architecture = ProcessorArchitecture.AARCH64;
             }
-
           } else if (name.startsWith("MIPS")) {
             architecture = ProcessorArchitecture.MIPS;
           }
@@ -422,7 +419,7 @@ abstract class SysInfo {
           processors.add(processor);
         }
 
-        if(processors.length == 0) {
+        if (processors.length == 0) {
           processors.add(_createUnknownProcessor());
         }
 
@@ -447,7 +444,7 @@ abstract class SysInfo {
           processors.add(processor);
         }
 
-        if(processors.length == 0) {
+        if (processors.length == 0) {
           processors.add(_createUnknownProcessor());
         }
 
@@ -491,7 +488,7 @@ abstract class SysInfo {
           }
         }
 
-        if(processors.length == 0) {
+        if (processors.length == 0) {
           processors.add(_createUnknownProcessor());
         }
 
@@ -604,8 +601,17 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-      case "macos":
         return _fluent(_exec("getconf", ["LONG_BIT"])).trim().parseInt().intValue;
+      case "macos":
+        if (Platform.version.contains("macos_ia32")) {
+          return 32;
+        } else if (Platform.version.contains("macos_x64")) {
+          return 64;
+        } else {
+          return kernelBitness;
+        }
+
+        break;
       case "windows":
         var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
         if (!wow64.isEmpty) {
@@ -639,7 +645,7 @@ abstract class SysInfo {
         var value = _fluent(data["VirtualSize"]).parseInt().intValue;
         return value;
       default:
-         _error();
+        _error();
     }
 
     return null;

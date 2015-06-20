@@ -1,9 +1,9 @@
 system_info
 =====
 
-Provides easy access to useful information about the system (architecture, bitness, kernel, operating system, CPU, user).
+Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 
-Version: 0.0.14
+Version: 0.0.16
 
 Warning! Not tested on Mac OS X!
 Warning! Not tested on Linux ARM!

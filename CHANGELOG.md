@@ -1,3 +1,11 @@
+## 0.0.16
+
+- Fixed bug in detection of `user space bitness` on Mac OS X
+
+## 0.0.15
+
+- Fixed bug in detection of `bitness of kernel` on Mac OS X
+
 ## 0.0.14
 
 - Added statistics `getVirtualMemorySize()` about the current memory usage by the current process

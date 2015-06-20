@@ -6,9 +6,7 @@ String _exec(String executable, List<String> arguments, {bool runInShell: false}
     if (result.exitCode == 0) {
       return result.stdout.toString();
     }
-
-  } catch (e) {
-  }
+  } catch (e) {}
 
   return null;
 }

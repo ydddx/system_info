@@ -1,5 +1,5 @@
 name: system_info
-version: 0.0.15
+version: 0.0.16
 author: Andrew Mezoni <andrew.mezoni@gmail.com>
 description: Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 homepage: https://github.com/mezoni/system_info
