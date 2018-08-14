@@ -2,7 +2,7 @@ import "package:system_info/system_info.dart";
 
 const int MEGABYTE = 1024 * 1024;
 
-void main() {  
+void main() {
   print("Kernel architecture     : ${SysInfo.kernelArchitecture}");
   print("Kernel bitness          : ${SysInfo.kernelBitness}");
   print("Kernel name             : ${SysInfo.kernelName}");

@@ -1,7 +1,8 @@
 part of system_info;
 
 class ProcessorArchitecture {
-  static const ProcessorArchitecture AARCH64 = const ProcessorArchitecture("AARCH64");
+  static const ProcessorArchitecture AARCH64 =
+      const ProcessorArchitecture("AARCH64");
 
   static const ProcessorArchitecture ARM = const ProcessorArchitecture("ARM");
 
@@ -11,9 +12,11 @@ class ProcessorArchitecture {
 
   static const ProcessorArchitecture X86 = const ProcessorArchitecture("X86");
 
-  static const ProcessorArchitecture X86_64 = const ProcessorArchitecture("X86_64");
+  static const ProcessorArchitecture X86_64 =
+      const ProcessorArchitecture("X86_64");
 
-  static const ProcessorArchitecture UNKNOWN = const ProcessorArchitecture("UNKNOWN");
+  static const ProcessorArchitecture UNKNOWN =
+      const ProcessorArchitecture("UNKNOWN");
 
   final String name;
 
@@ -31,7 +34,11 @@ class ProcessorInfo {
 
   final String vendor;
 
-  ProcessorInfo({this.architecture: ProcessorArchitecture.UNKNOWN, this.name: "", this.socket: 0, this.vendor: ""});
+  ProcessorInfo(
+      {this.architecture: ProcessorArchitecture.UNKNOWN,
+      this.name: "",
+      this.socket: 0,
+      this.vendor: ""});
 }
 
 abstract class SysInfo {
@@ -181,8 +188,15 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var data = _fluent(_exec("cat", ["/proc/meminfo"])).trim().stringToMap(":").mapValue;
-        var value = _fluent(data["MemFree"]).split(" ").elementAt(0).parseInt().intValue;
+        var data = _fluent(_exec("cat", ["/proc/meminfo"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
+        var value = _fluent(data["MemFree"])
+            .split(" ")
+            .elementAt(0)
+            .parseInt()
+            .intValue;
         return value * 1024;
       case "macos":
         return getFreeVirtualMemory();
@@ -201,14 +215,30 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var data = _fluent(_exec("cat", ["/proc/meminfo"])).trim().stringToMap(":").mapValue;
-        var physical = _fluent(data["MemFree"]).split(" ").elementAt(0).parseInt().intValue;
-        var swap = _fluent(data["SwapFree"]).split(" ").elementAt(0).parseInt().intValue;
+        var data = _fluent(_exec("cat", ["/proc/meminfo"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
+        var physical = _fluent(data["MemFree"])
+            .split(" ")
+            .elementAt(0)
+            .parseInt()
+            .intValue;
+        var swap = _fluent(data["SwapFree"])
+            .split(" ")
+            .elementAt(0)
+            .parseInt()
+            .intValue;
         return (physical + swap) * 1024;
       case "macos":
-        var data = _fluent(_exec("vm_stat", [])).trim().stringToMap(":").mapValue;
-        var free = _fluent(data["Pages free"]).replaceAll(".", "").parseInt().intValue;
-        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"])).trim().parseInt().intValue;
+        var data =
+            _fluent(_exec("vm_stat", [])).trim().stringToMap(":").mapValue;
+        var free =
+            _fluent(data["Pages free"]).replaceAll(".", "").parseInt().intValue;
+        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"]))
+            .trim()
+            .parseInt()
+            .intValue;
         return free * pageSize;
       case "windows":
         var data = _wmicGetValueAsMap("OS", ["FreeVirtualMemory"]);
@@ -267,7 +297,8 @@ abstract class SysInfo {
 
             var file = new File(filePath);
             if (file.existsSync()) {
-              var fileType = _fluent(_exec("file", ["-b", file.path])).trim().stringValue;
+              var fileType =
+                  _fluent(_exec("file", ["-b", file.path])).trim().stringValue;
               if (fileType.startsWith("ELF 64-bit")) {
                 return 64;
               }
@@ -336,10 +367,14 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var data = _fluent(_exec("lsb_release", ["-a"])).trim().stringToMap(":").mapValue;
+        var data = _fluent(_exec("lsb_release", ["-a"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
         return _fluent(data["Distributor ID"]).stringValue;
       case "macos":
-        var data = _fluent(_exec("sw_vers", [])).trim().stringToMap(":").mapValue;
+        var data =
+            _fluent(_exec("sw_vers", [])).trim().stringToMap(":").mapValue;
         return _fluent(data["ProductName"]).stringValue;
       case "windows":
         var data = _wmicGetValueAsMap("OS", ["Caption"]);
@@ -355,10 +390,14 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var data = _fluent(_exec("lsb_release", ["-a"])).trim().stringToMap(":").mapValue;
+        var data = _fluent(_exec("lsb_release", ["-a"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
         return _fluent(data["Release"]).stringValue;
       case "macos":
-        var data = _fluent(_exec("sw_vers", [])).trim().stringToMap(":").mapValue;
+        var data =
+            _fluent(_exec("sw_vers", [])).trim().stringToMap(":").mapValue;
         return _fluent(data["ProductVersion"]).stringValue;
       case "windows":
         var data = _wmicGetValueAsMap("OS", ["Version"]);
@@ -375,7 +414,11 @@ abstract class SysInfo {
       case "android":
       case "linux":
         var processors = <ProcessorInfo>[];
-        var groups = _fluent(_exec("cat", ["/proc/cpuinfo"])).trim().stringToList().listToGroups(":").groupsValue;
+        var groups = _fluent(_exec("cat", ["/proc/cpuinfo"]))
+            .trim()
+            .stringToList()
+            .listToGroups(":")
+            .groupsValue;
         for (var group in groups) {
           var socket = _fluent(group["physical id"]).parseInt().intValue;
           var vendor = _fluent(group["vendor_id"]).stringValue;
@@ -415,7 +458,11 @@ abstract class SysInfo {
             architecture = ProcessorArchitecture.MIPS;
           }
 
-          var processor = new ProcessorInfo(architecture: architecture, name: name, socket: socket, vendor: vendor);
+          var processor = new ProcessorInfo(
+              architecture: architecture,
+              name: name,
+              socket: socket,
+              vendor: vendor);
           processors.add(processor);
         }
 
@@ -425,22 +472,31 @@ abstract class SysInfo {
 
         return new UnmodifiableListView(processors);
       case "macos":
-        var data = _fluent(_exec("sysctl", ["machdep.cpu"])).trim().stringToMap(":").mapValue;
+        var data = _fluent(_exec("sysctl", ["machdep.cpu"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
         var architecture = ProcessorArchitecture.UNKNOWN;
         if (data["machdep.cpu.vendor"] == "GenuineIntel") {
           architecture = ProcessorArchitecture.X86;
-          var extfeatures = _fluent(data["machdep.cpu.extfeatures"]).split(" ").listValue;
+          var extfeatures =
+              _fluent(data["machdep.cpu.extfeatures"]).split(" ").listValue;
           if (extfeatures.contains("EM64T")) {
             architecture = ProcessorArchitecture.X86_64;
           }
         }
 
-        var numberOfCores = _fluent(data["machdep.cpu.core_count"]).parseInt().intValue;
+        var numberOfCores =
+            _fluent(data["machdep.cpu.core_count"]).parseInt().intValue;
         var processors = <ProcessorInfo>[];
         for (var i = 0; i < numberOfCores; i++) {
           var name = _fluent(data["machdep.cpu.brand_string"]).stringValue;
           var vendor = _fluent(data["machdep.cpu.vendor"]).stringValue;
-          var processor = new ProcessorInfo(architecture: architecture, name: name, socket: 0, vendor: vendor);
+          var processor = new ProcessorInfo(
+              architecture: architecture,
+              name: name,
+              socket: 0,
+              vendor: vendor);
           processors.add(processor);
         }
 
@@ -450,12 +506,19 @@ abstract class SysInfo {
 
         return new UnmodifiableListView(processors);
       case "windows":
-        var groups = _wmicGetValueAsGroups("CPU", ["Architecture", "DataWidth", "Manufacturer", "Name", "NumberOfCores"]);
+        var groups = _wmicGetValueAsGroups("CPU", [
+          "Architecture",
+          "DataWidth",
+          "Manufacturer",
+          "Name",
+          "NumberOfCores"
+        ]);
         var numberOfSockets = groups.length;
         var processors = <ProcessorInfo>[];
         for (var i = 0; i < numberOfSockets; i++) {
           var data = groups[i];
-          var numberOfCores = _fluent(data["NumberOfCores"]).parseInt().intValue;
+          var numberOfCores =
+              _fluent(data["NumberOfCores"]).parseInt().intValue;
           var architecture = ProcessorArchitecture.UNKNOWN;
           switch (_fluent(data["Architecture"]).parseInt().intValue) {
             case 0:
@@ -483,7 +546,11 @@ abstract class SysInfo {
           for (var socket = 0; socket < numberOfCores; socket++) {
             var name = _fluent(data["Name"]).stringValue;
             var vendor = _fluent(data["Manufacturer"]).stringValue;
-            var processor = new ProcessorInfo(architecture: architecture, name: name, socket: socket, vendor: vendor);
+            var processor = new ProcessorInfo(
+                architecture: architecture,
+                name: name,
+                socket: socket,
+                vendor: vendor);
             processors.add(processor);
           }
         }
@@ -504,15 +571,29 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var data = _fluent(_exec("cat", ["/proc/meminfo"])).trim().stringToMap(":").mapValue;
-        var value = _fluent(data["MemTotal"]).split(" ").elementAt(0).parseInt().intValue;
+        var data = _fluent(_exec("cat", ["/proc/meminfo"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
+        var value = _fluent(data["MemTotal"])
+            .split(" ")
+            .elementAt(0)
+            .parseInt()
+            .intValue;
         return value * 1024;
       case "macos":
-        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"])).trim().parseInt().intValue;
-        var size = _fluent(_exec("sysctl", ["-n", "hw.memsize"])).trim().parseInt().intValue;
+        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"]))
+            .trim()
+            .parseInt()
+            .intValue;
+        var size = _fluent(_exec("sysctl", ["-n", "hw.memsize"]))
+            .trim()
+            .parseInt()
+            .intValue;
         return size * pageSize;
       case "windows":
-        var data = _wmicGetValueAsMap("ComputerSystem", ["TotalPhysicalMemory"]);
+        var data =
+            _wmicGetValueAsMap("ComputerSystem", ["TotalPhysicalMemory"]);
         var value = _fluent(data["TotalPhysicalMemory"]).parseInt().intValue;
         return value;
       default:
@@ -526,18 +607,46 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        var data = _fluent(_exec("cat", ["/proc/meminfo"])).trim().stringToMap(":").mapValue;
-        var physical = _fluent(data["MemTotal"]).split(" ").elementAt(0).parseInt().intValue;
-        var swap = _fluent(data["SwapTotal"]).split(" ").elementAt(0).parseInt().intValue;
+        var data = _fluent(_exec("cat", ["/proc/meminfo"]))
+            .trim()
+            .stringToMap(":")
+            .mapValue;
+        var physical = _fluent(data["MemTotal"])
+            .split(" ")
+            .elementAt(0)
+            .parseInt()
+            .intValue;
+        var swap = _fluent(data["SwapTotal"])
+            .split(" ")
+            .elementAt(0)
+            .parseInt()
+            .intValue;
         return (physical + swap) * 1024;
       case "macos":
-        var data = _fluent(_exec("vm_stat", [])).trim().stringToMap(":").mapValue;
-        var free = _fluent(data["Pages free"]).replaceAll(".", "").parseInt().intValue;
-        var active = _fluent(data["Pages active"]).replaceAll(".", "").parseInt().intValue;
-        var inactive = _fluent(data["Pages inactive"]).replaceAll(".", "").parseInt().intValue;
-        var speculative = _fluent(data["Pages speculative"]).replaceAll(".", "").parseInt().intValue;
-        var wired = _fluent(data["Pages wired down"]).replaceAll(".", "").parseInt().intValue;
-        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"])).trim().parseInt().intValue;
+        var data =
+            _fluent(_exec("vm_stat", [])).trim().stringToMap(":").mapValue;
+        var free =
+            _fluent(data["Pages free"]).replaceAll(".", "").parseInt().intValue;
+        var active = _fluent(data["Pages active"])
+            .replaceAll(".", "")
+            .parseInt()
+            .intValue;
+        var inactive = _fluent(data["Pages inactive"])
+            .replaceAll(".", "")
+            .parseInt()
+            .intValue;
+        var speculative = _fluent(data["Pages speculative"])
+            .replaceAll(".", "")
+            .parseInt()
+            .intValue;
+        var wired = _fluent(data["Pages wired down"])
+            .replaceAll(".", "")
+            .parseInt()
+            .intValue;
+        var pageSize = _fluent(_exec("sysctl", ["-n", "hw.pagesize"]))
+            .trim()
+            .parseInt()
+            .intValue;
         return (free + active + inactive + speculative + wired) * pageSize;
       case "windows":
         var data = _wmicGetValueAsMap("OS", ["TotalVirtualMemorySize"]);
@@ -572,7 +681,8 @@ abstract class SysInfo {
       case "macos":
         return _fluent(_exec("id", ["-u"])).trim().stringValue;
       case "windows":
-        var data = _wmicGetValueAsMap("UserAccount", ["SID"], where: ["Name=\"$userName\""]);
+        var data = _wmicGetValueAsMap("UserAccount", ["SID"],
+            where: ["Name=\"$userName\""]);
         return _fluent(data["SID"]).stringValue;
       default:
         _error();
@@ -601,7 +711,10 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case "android":
       case "linux":
-        return _fluent(_exec("getconf", ["LONG_BIT"])).trim().parseInt().intValue;
+        return _fluent(_exec("getconf", ["LONG_BIT"]))
+            .trim()
+            .parseInt()
+            .intValue;
       case "macos":
         if (Platform.version.contains("macos_ia32")) {
           return 32;
@@ -637,11 +750,15 @@ abstract class SysInfo {
       case "android":
       case "linux":
       case "macos":
-        var data = _fluent(_exec("ps", ["-o", "vsz", "-p", "$pid"])).trim().stringToList().listValue;
+        var data = _fluent(_exec("ps", ["-o", "vsz", "-p", "$pid"]))
+            .trim()
+            .stringToList()
+            .listValue;
         var size = _fluent(data.elementAt(1)).parseInt().intValue;
         return size * 1024;
       case "windows":
-        var data = _wmicGetValueAsMap("Process", ["VirtualSize"], where: ["Handle=\"$pid\""]);
+        var data = _wmicGetValueAsMap("Process", ["VirtualSize"],
+            where: ["Handle=\"$pid\""]);
         var value = _fluent(data["VirtualSize"]).parseInt().intValue;
         return value;
       default:

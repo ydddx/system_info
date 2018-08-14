@@ -1,6 +1,7 @@
 part of system_info;
 
-String _exec(String executable, List<String> arguments, {bool runInShell: false}) {
+String _exec(String executable, List<String> arguments,
+    {bool runInShell: false}) {
   try {
     var result = Process.runSync(executable, arguments, runInShell: runInShell);
     if (result.exitCode == 0) {
@@ -73,7 +74,8 @@ void _parseLdConf(String path, List<String> paths, Set<String> processed) {
   }
 }
 
-String _wmicGetValue(String section, List<String> fields, {List<String> where}) {
+String _wmicGetValue(String section, List<String> fields,
+    {List<String> where}) {
   var arguments = <String>[section];
   if (where != null) {
     arguments.add("where");
@@ -86,12 +88,15 @@ String _wmicGetValue(String section, List<String> fields, {List<String> where}) 
   return _exec("wmic", arguments);
 }
 
-List<Map<String, String>> _wmicGetValueAsGroups(String section, List<String> fields, {List<String> where}) {
+List<Map<String, String>> _wmicGetValueAsGroups(
+    String section, List<String> fields,
+    {List<String> where}) {
   var string = _wmicGetValue(section, fields, where: where);
   return _fluent(string).stringToList().listToGroups("=").groupsValue;
 }
 
-Map<String, String> _wmicGetValueAsMap(String section, List<String> fields, {List<String> where}) {
+Map<String, String> _wmicGetValueAsMap(String section, List<String> fields,
+    {List<String> where}) {
   var string = _wmicGetValue(section, fields, where: where);
-  return _fluent(string).stringToList().listToMap("=").mapValue;
+  return _fluent(string).stringToList().listToMap("=").mapValue as Map<String, String>;
 }

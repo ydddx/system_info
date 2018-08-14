@@ -1,3 +1,7 @@
+## 0.1.0
+
+- Adaptation to Dart 2.0
+
 ## 0.0.16
 
 - Fixed bug in detection of `user space bitness` on Mac OS X

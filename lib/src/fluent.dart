@@ -9,7 +9,7 @@ class _Fluent {
 
   List<Map<String, String>> get groupsValue {
     if (value is List<Map<String, String>>) {
-      return value;
+      return value as List<Map<String, String>>;
     }
 
     return <Map<String, String>>[];
@@ -17,7 +17,7 @@ class _Fluent {
 
   int get intValue {
     if (value is int) {
-      return value;
+      return value as int;
     }
 
     return 0;
@@ -25,7 +25,7 @@ class _Fluent {
 
   List get listValue {
     if (value is List) {
-      return value;
+      return value as List;
     }
 
     return [];
@@ -33,7 +33,7 @@ class _Fluent {
 
   Map get mapValue {
     if (value is Map) {
-      return value;
+      return value as Map;
     }
 
     return {};
@@ -41,7 +41,7 @@ class _Fluent {
 
   String get stringValue {
     if (value is String) {
-      return value;
+      return value as String;
     }
 
     return "";
@@ -71,9 +71,11 @@ class _Fluent {
     return this;
   }
 
-  _Fluent exec(String executable, List<String> arguments, {bool runInShell: false}) {
+  _Fluent exec(String executable, List<String> arguments,
+      {bool runInShell: false}) {
     try {
-      var result = Process.runSync(executable, arguments, runInShell: runInShell);
+      var result =
+          Process.runSync(executable, arguments, runInShell: runInShell);
       if (result.exitCode == 0) {
         value = result.stdout.toString();
       }
@@ -96,7 +98,7 @@ class _Fluent {
 
   _Fluent listToGroups(String separator) {
     var result = <Map<String, String>>[];
-    if (value is! List<Map<String, String>>) {
+    if (value is! List) {
       value = result;
       return this;
     }
@@ -168,7 +170,7 @@ class _Fluent {
     if (value == null) {
       value = defaultValue;
     } else {
-      value = int.parse(value.toString(), onError: (e) => defaultValue);
+      value = int.parse(value.toString()) ?? defaultValue;
     }
 
     return this;
