@@ -72,7 +72,7 @@ class _Fluent {
   }
 
   _Fluent exec(String executable, List<String> arguments,
-      {bool runInShell: false}) {
+      {bool runInShell = false}) {
     try {
       var result =
           Process.runSync(executable, arguments, runInShell: runInShell);
@@ -103,7 +103,7 @@ class _Fluent {
       return this;
     }
 
-    List list = value;
+    var list = value as List;
     var map = <String, String>{};
     result.add(map);
     for (var element in list) {
@@ -131,7 +131,7 @@ class _Fluent {
       return this;
     }
 
-    List list = value;
+    var list = value as List;
     var map = <String, String>{};
     for (var element in list) {
       var string = element.toString();

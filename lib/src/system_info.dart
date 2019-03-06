@@ -35,99 +35,77 @@ class ProcessorInfo {
   final String vendor;
 
   ProcessorInfo(
-      {this.architecture: ProcessorArchitecture.UNKNOWN,
-      this.name: "",
-      this.socket: 0,
-      this.vendor: ""});
+      {this.architecture = ProcessorArchitecture.UNKNOWN,
+      this.name = "",
+      this.socket = 0,
+      this.vendor = ""});
 }
 
 abstract class SysInfo {
-  /**
-   * Returns the architecture of the kernel.
-   *
-   *     print(SysInfo.kernelArchitecture);
-   *     => i686
-   */
+  /// Returns the architecture of the kernel.
+  ///
+  ///     print(SysInfo.kernelArchitecture);
+  ///     => i686
   static final String kernelArchitecture = _getKernelArchitecture();
 
-  /**
-   * Returns the bintness of kernel.
-   *
-   *     print(SysInfo.kernelBitness);
-   *     => 32
-   */
+  /// Returns the bintness of kernel.
+  ///
+  ///     print(SysInfo.kernelBitness);
+  ///     => 32
   static final int kernelBitness = _getKernelBitness();
 
-  /**
-   * Returns the name of kernel.
-   *
-   *     print(SysInfo.kernelName);
-   *     => Linux
-   */
+  /// Returns the name of kernel.
+  ///
+  ///     print(SysInfo.kernelName);
+  ///     => Linux
   static final String kernelName = _getKernelName();
 
-  /**
-   * Returns the version of kernel.
-   *
-   *     print(SysInfo.kernelVersion);
-   *     => 32
-   */
+  /// Returns the version of kernel.
+  ///
+  ///     print(SysInfo.kernelVersion);
+  ///     => 32
   static final String kernelVersion = _getKernelVersion();
 
-  /**
-   * Returns the name of operating system.
-   *
-   *     print(SysInfo.operatingSystemName);
-   *     => Ubuntu
-   */
+  /// Returns the name of operating system.
+  ///
+  ///     print(SysInfo.operatingSystemName);
+  ///     => Ubuntu
   static final String operatingSystemName = _getOperatingSystemName();
 
-  /**
-   * Returns the version of operating system.
-   *
-   *     print(SysInfo.operatingSystemVersion);
-   *     => 14.04
-   */
+  /// Returns the version of operating system.
+  ///
+  ///     print(SysInfo.operatingSystemVersion);
+  ///     => 14.04
   static final String operatingSystemVersion = _getOperatingSystemVersion();
 
-  /**
-   * Returns the information about the processors.
-   *
-   *     print(SysInfo.processors.first.vendor);
-   *     => GenuineIntel
-   */
+  /// Returns the information about the processors.
+  ///
+  ///     print(SysInfo.processors.first.vendor);
+  ///     => GenuineIntel
   static final List<ProcessorInfo> processors = _getProcessors();
 
-  /**
-   * Returns the path of user home directory.
-   *
-   *     print(SysInfo.userDirectory);
-   *     => /home/andrew
-   */
+  /// Returns the path of user home directory.
+  ///
+  ///     print(SysInfo.userDirectory);
+  ///     => /home/andrew
   static final String userDirectory = _getUserDirectory();
 
-  /**
-   * Returns the identifier of current user.
-   *
-   *     print(SysInfo.userId);
-   *     => 1000
-   */
+  /// Returns the identifier of current user.
+  ///
+  ///     print(SysInfo.userId);
+  ///     => 1000
   static final String userId = _getUserId();
 
-  /**
-   * Returns the name of current user.
-   *
-   *     print(SysInfo.userName);
-   *     => "Andrew"
-   */
+  /// Returns the name of current user.
+  ///
+  ///     print(SysInfo.userName);
+  ///     => "Andrew"
   static final String userName = _getUserName();
 
-  /**
-   * Returns the bitness of the user space.
-   *
-   *     print(SysInfo.userSpaceBitness);
-   *     => 32
-   */
+  /// Returns the bitness of the user space.
+  ///
+  ///     print(SysInfo.userSpaceBitness);
+  ///     => 32
   static final int userSpaceBitness = _getUserSpaceBitness();
 
   static final Map<String, String> _environment = Platform.environment;
@@ -136,44 +114,34 @@ abstract class SysInfo {
 
   SysInfo._internal();
 
-  /**
-   * Returns the amount of free physical memory in bytes.
-   *
-   *     print(SysInfo.getFreePhysicalMemory());
-   *     => 3755331584
-   */
+  /// Returns the amount of free physical memory in bytes.
+  ///
+  ///     print(SysInfo.getFreePhysicalMemory());
+  ///     => 3755331584
   static int getFreePhysicalMemory() => _getFreePhysicalMemory();
 
-  /**
-   * Returns the amount of free virtual memory in bytes.
-   *
-   *     print(SysInfo.getFreeVirtualMemory());
-   *     => 3755331584
-   */
+  /// Returns the amount of free virtual memory in bytes.
+  ///
+  ///     print(SysInfo.getFreeVirtualMemory());
+  ///     => 3755331584
   static int getFreeVirtualMemory() => _getFreeVirtualMemory();
 
-  /**
-   * Returns the amount of total physical memory in bytes.
-   *
-   *     print(SysInfo.getTotalPhysicalMemory());
-   *     => 3755331584
-   */
+  /// Returns the amount of total physical memory in bytes.
+  ///
+  ///     print(SysInfo.getTotalPhysicalMemory());
+  ///     => 3755331584
   static int getTotalPhysicalMemory() => _getTotalPhysicalMemory();
 
-  /**
-   * Returns the amount of total virtual memory in bytes.
-   *
-   *     print(SysInfo.getTotalVirtualMemory());
-   *     => 3755331584
-   */
+  /// Returns the amount of total virtual memory in bytes.
+  ///
+  ///     print(SysInfo.getTotalVirtualMemory());
+  ///     => 3755331584
   static int getTotalVirtualMemory() => _getTotalVirtualMemory();
 
-  /**
-   * Returns the amount of virtual memory in bytes used by the proccess.
-   *
-   *     print(SysInfo.getVirtualMemorySize());
-   *     => 123456
-   */
+  /// Returns the amount of virtual memory in bytes used by the proccess.
+  ///
+  ///     print(SysInfo.getVirtualMemorySize());
+  ///     => 123456
   static int getVirtualMemorySize() => _getVirtualMemorySize();
 
   static ProcessorInfo _createUnknownProcessor() {
@@ -259,7 +227,7 @@ abstract class SysInfo {
         return _fluent(_exec("uname", ["-m"])).trim().stringValue;
       case "windows":
         var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
-        if (!wow64.isEmpty) {
+        if (wow64.isNotEmpty) {
           return wow64;
         }
 
@@ -315,7 +283,7 @@ abstract class SysInfo {
         return 32;
       case "windows":
         var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
-        if (!wow64.isEmpty) {
+        if (wow64.isNotEmpty) {
           return 64;
         }
 
@@ -426,7 +394,7 @@ abstract class SysInfo {
           var name = "";
           for (var field in modelFields) {
             name = _fluent(group[field]).stringValue;
-            if (!name.isEmpty) {
+            if (name.isNotEmpty) {
               break;
             }
           }
@@ -466,7 +434,7 @@ abstract class SysInfo {
           processors.add(processor);
         }
 
-        if (processors.length == 0) {
+        if (processors.isEmpty) {
           processors.add(_createUnknownProcessor());
         }
 
@@ -500,7 +468,7 @@ abstract class SysInfo {
           processors.add(processor);
         }
 
-        if (processors.length == 0) {
+        if (processors.isEmpty) {
           processors.add(_createUnknownProcessor());
         }
 
@@ -555,7 +523,7 @@ abstract class SysInfo {
           }
         }
 
-        if (processors.length == 0) {
+        if (processors.isEmpty) {
           processors.add(_createUnknownProcessor());
         }
 
@@ -727,7 +695,7 @@ abstract class SysInfo {
         break;
       case "windows":
         var wow64 = _fluent(_environment["PROCESSOR_ARCHITEW6432"]).stringValue;
-        if (!wow64.isEmpty) {
+        if (wow64.isNotEmpty) {
           return 32;
         }
 

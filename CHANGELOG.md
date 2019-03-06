@@ -1,3 +1,7 @@
+## 0.1.1
+
+- To avoid downgrading the rating on https://pub.dartlang.org, the source code has been changed to fit Google’s ever-changing recommendations on what a good (pedantic) source code should be.
+
 ## 0.1.0
 
 - Adaptation to Dart 2.0

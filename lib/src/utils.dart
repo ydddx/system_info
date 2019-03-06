@@ -1,7 +1,7 @@
 part of system_info;
 
 String _exec(String executable, List<String> arguments,
-    {bool runInShell: false}) {
+    {bool runInShell = false}) {
   try {
     var result = Process.runSync(executable, arguments, runInShell: runInShell);
     if (result.exitCode == 0) {
@@ -98,5 +98,6 @@ List<Map<String, String>> _wmicGetValueAsGroups(
 Map<String, String> _wmicGetValueAsMap(String section, List<String> fields,
     {List<String> where}) {
   var string = _wmicGetValue(section, fields, where: where);
-  return _fluent(string).stringToList().listToMap("=").mapValue as Map<String, String>;
+  return _fluent(string).stringToList().listToMap("=").mapValue
+      as Map<String, String>;
 }
