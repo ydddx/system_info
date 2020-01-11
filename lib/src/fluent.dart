@@ -1,6 +1,6 @@
 part of system_info;
 
-_Fluent _fluent(dynamic value) => new _Fluent(value);
+_Fluent _fluent(Object value) => _Fluent(value);
 
 class _Fluent {
   dynamic value;
@@ -44,10 +44,10 @@ class _Fluent {
       return value as String;
     }
 
-    return "";
+    return '';
   }
 
-  _Fluent operator [](dynamic key) {
+  _Fluent operator [](Object key) {
     try {
       value = value[key];
     } catch (e) {
@@ -57,7 +57,7 @@ class _Fluent {
     return this;
   }
 
-  _Fluent elementAt(int index, [dynamic defaultValue]) {
+  _Fluent elementAt(int index, [Object defaultValue]) {
     try {
       value = value[index];
     } catch (e) {
@@ -74,7 +74,7 @@ class _Fluent {
   _Fluent exec(String executable, List<String> arguments,
       {bool runInShell = false}) {
     try {
-      var result =
+      final result =
           Process.runSync(executable, arguments, runInShell: runInShell);
       if (result.exitCode == 0) {
         value = result.stdout.toString();
@@ -97,21 +97,21 @@ class _Fluent {
   }
 
   _Fluent listToGroups(String separator) {
-    var result = <Map<String, String>>[];
+    final result = <Map<String, String>>[];
     if (value is! List) {
       value = result;
       return this;
     }
 
-    var list = value as List;
+    final list = value as List;
     var map = <String, String>{};
     result.add(map);
     for (var element in list) {
-      var string = element.toString();
-      var index = string.indexOf(separator);
+      final string = element.toString();
+      final index = string.indexOf(separator);
       if (index != -1) {
-        var key = string.substring(0, index).trim();
-        var value = string.substring(index + 1).trim();
+        final key = string.substring(0, index).trim();
+        final value = string.substring(index + 1).trim();
         if (map.containsKey(key)) {
           map = <String, String>{};
           result.add(map);
@@ -131,14 +131,14 @@ class _Fluent {
       return this;
     }
 
-    var list = value as List;
-    var map = <String, String>{};
+    final list = value as List;
+    final map = <String, String>{};
     for (var element in list) {
-      var string = element.toString();
-      var index = string.indexOf(separator);
+      final string = element.toString();
+      final index = string.indexOf(separator);
       if (index != -1) {
-        var key = string.substring(0, index).trim();
-        var value = string.substring(index + 1).trim();
+        final key = string.substring(0, index).trim();
+        final value = string.substring(index + 1).trim();
         map[key] = value;
       }
     }
@@ -154,9 +154,9 @@ class _Fluent {
     }
 
     var string = value.toString();
-    string = string.replaceAll("\r\n", "\n");
-    string = string.replaceAll("\r", "\n");
-    value = string.split("\n");
+    string = string.replaceAll('\r\n', '\n');
+    string = string.replaceAll('\r', '\n');
+    value = string.split('\n');
     return this;
   }
 

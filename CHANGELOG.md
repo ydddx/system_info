@@ -1,3 +1,7 @@
+## 0.1.2
+
+- The source code has been modified in accordance with Google’s guidelines about the effectiveness of the Dart language
+
 ## 0.1.1
 
 - To avoid downgrading the rating on https://pub.dartlang.org, the source code has been changed to fit Google’s ever-changing recommendations on what a good (pedantic) source code should be.
