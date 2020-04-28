@@ -387,9 +387,40 @@ abstract class SysInfo {
             .stringToList()
             .listToGroups(':')
             .groupsValue;
-        for (var group in groups) {
-          final socket = _fluent(group['physical id']).parseInt().intValue;
-          final vendor = _fluent(group['vendor_id']).stringValue;
+
+        final processorGroups =
+            groups.where((e) => e.keys.contains('processor'));
+        var cpuImplementer = '';
+        var cpuPart = '';
+        var hardware = '';
+        var processorName = '';
+        for (final group in groups) {
+          if (cpuPart.isEmpty) {
+            cpuPart = _fluent(group['CPU part']).stringValue;
+          }
+
+          if (hardware.isEmpty) {
+            hardware = _fluent(group['Hardware']).stringValue;
+          }
+
+          if (cpuImplementer.isEmpty) {
+            cpuImplementer = _fluent(group['CPU implementer']).stringValue;
+          }
+
+          if (processorName.isEmpty) {
+            processorName = _fluent(group['Processor']).stringValue;
+          }
+        }
+
+        for (final group in processorGroups) {
+          var socket = 0;
+          if (_fluent(group['physical id']).stringValue.isNotEmpty) {
+            socket = _fluent(group['physical id']).parseInt().intValue;
+          } else {
+            socket = _fluent(group['processor']).parseInt().intValue;
+          }
+
+          var vendor = _fluent(group['vendor_id']).stringValue;
           final modelFields = const <String>['model name', 'cpu model'];
           var name = '';
           for (var field in modelFields) {
@@ -397,6 +428,10 @@ abstract class SysInfo {
             if (name.isNotEmpty) {
               break;
             }
+          }
+
+          if (name.isEmpty) {
+            name = processorName;
           }
 
           var architecture = ProcessorArchitecture.UNKNOWN;
@@ -422,8 +457,19 @@ abstract class SysInfo {
             if (features.contains('fp')) {
               architecture = ProcessorArchitecture.AARCH64;
             }
+          } else if (name.toUpperCase().startsWith('AARCH64')) {
+            architecture = ProcessorArchitecture.AARCH64;
           } else if (name.startsWith('MIPS')) {
             architecture = ProcessorArchitecture.MIPS;
+          }
+
+          if (vendor.isEmpty) {
+            switch (cpuImplementer.toLowerCase()) {
+              case '0x51':
+                vendor = 'Qualcomm';
+                break;
+              default:
+            }
           }
 
           final processor = ProcessorInfo(

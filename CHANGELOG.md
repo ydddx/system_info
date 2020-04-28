@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Minor changes in processor architecture recognition
+
 ## 0.1.2
 
 - The source code has been modified in accordance with Google’s guidelines about the effectiveness of the Dart language

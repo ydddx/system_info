@@ -1,7 +1,5 @@
 import 'package:system_info/system_info.dart';
 
-const int MEGABYTE = 1024 * 1024;
-
 void main() {
   print('Kernel architecture     : ${SysInfo.kernelArchitecture}');
   print('Kernel bitness          : ${SysInfo.kernelBitness}');
@@ -32,3 +30,5 @@ void main() {
   print(
       'Virtual memory size     : ${SysInfo.getVirtualMemorySize() ~/ MEGABYTE} MB');
 }
+
+const int MEGABYTE = 1024 * 1024;

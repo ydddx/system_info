@@ -104,20 +104,26 @@ class _Fluent {
     }
 
     final list = value as List;
-    var map = <String, String>{};
-    result.add(map);
+    Map<String, String> map;
     for (var element in list) {
       final string = element.toString();
       final index = string.indexOf(separator);
       if (index != -1) {
+        if (map == null) {
+          map = {};
+          result.add(map);
+        }
+
         final key = string.substring(0, index).trim();
         final value = string.substring(index + 1).trim();
         if (map.containsKey(key)) {
-          map = <String, String>{};
+          map = {};
           result.add(map);
         }
 
         map[key] = value;
+      } else {
+        map = null;
       }
     }
 
@@ -147,25 +153,6 @@ class _Fluent {
     return this;
   }
 
-  _Fluent stringToList() {
-    if (value == null) {
-      value = <String>[];
-      return this;
-    }
-
-    var string = value.toString();
-    string = string.replaceAll('\r\n', '\n');
-    string = string.replaceAll('\r', '\n');
-    value = string.split('\n');
-    return this;
-  }
-
-  _Fluent stringToMap(String separator) {
-    stringToList();
-    listToMap(separator);
-    return this;
-  }
-
   _Fluent parseInt([int defaultValue = 0]) {
     if (value == null) {
       value = defaultValue;
@@ -183,6 +170,25 @@ class _Fluent {
 
   _Fluent split(String separtor) {
     value = value.toString().split(separtor);
+    return this;
+  }
+
+  _Fluent stringToList() {
+    if (value == null) {
+      value = <String>[];
+      return this;
+    }
+
+    var string = value.toString();
+    string = string.replaceAll('\r\n', '\n');
+    //string = string.replaceAll('\r', '\n');
+    value = string.split('\n');
+    return this;
+  }
+
+  _Fluent stringToMap(String separator) {
+    stringToList();
+    listToMap(separator);
     return this;
   }
 
