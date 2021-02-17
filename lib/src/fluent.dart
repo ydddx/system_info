@@ -1,15 +1,15 @@
 part of system_info;
 
-_Fluent _fluent(Object value) => _Fluent(value);
+_Fluent _fluent(Object? value) => _Fluent(value);
 
 class _Fluent {
-  dynamic value;
+  dynamic? value;
 
   _Fluent(this.value);
 
-  List<Map<String, String>> get groupsValue {
+  List<Map<String, String>>? get groupsValue {
     if (value is List<Map<String, String>>) {
-      return value as List<Map<String, String>>;
+      return value as List<Map<String, String>>?;
     }
 
     return <Map<String, String>>[];
@@ -57,7 +57,7 @@ class _Fluent {
     return this;
   }
 
-  _Fluent elementAt(int index, [Object defaultValue]) {
+  _Fluent elementAt(int index, [Object? defaultValue]) {
     try {
       value = value[index];
     } catch (e) {
@@ -104,7 +104,7 @@ class _Fluent {
     }
 
     final list = value as List;
-    Map<String, String> map;
+    Map<String, String>? map;
     for (var element in list) {
       final string = element.toString();
       final index = string.indexOf(separator);
@@ -157,7 +157,7 @@ class _Fluent {
     if (value == null) {
       value = defaultValue;
     } else {
-      value = int.parse(value.toString()) ?? defaultValue;
+      value = int.tryParse(value.toString()) ?? defaultValue;
     }
 
     return this;
