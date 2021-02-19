@@ -1,6 +1,6 @@
 part of system_info;
 
-String _exec(String executable, List<String> arguments,
+String? _exec(String executable, List<String> arguments,
     {bool runInShell = false}) {
   try {
     final result =
@@ -15,9 +15,9 @@ String _exec(String executable, List<String> arguments,
   return null;
 }
 
-String _resolveLink(String path) {
+String? _resolveLink(String path) {
   while (true) {
-    if (!FileUtils.testfile(path, 'link')) {
+    if (!FileUtils.testfile(path, 'link')!) {
       break;
     }
 
@@ -32,17 +32,17 @@ String _resolveLink(String path) {
 }
 
 void _parseLdConf(String path, List<String> paths, Set<String> processed) {
-  path = _resolveLink(path);
-  if (path == null) {
+  final _path = _resolveLink(path);
+  if (_path == null) {
     return;
   }
 
-  final file = File(path);
+  final file = File(_path);
   if (!file.existsSync()) {
     return;
   }
 
-  final dir = FileUtils.dirname(path);
+  final dir = FileUtils.dirname(_path);
   for (var line in file.readAsLinesSync()) {
     line = line.trim();
     final index = line.indexOf('#');
@@ -77,8 +77,8 @@ void _parseLdConf(String path, List<String> paths, Set<String> processed) {
   }
 }
 
-String _wmicGetValue(String section, List<String> fields,
-    {List<String> where}) {
+String? _wmicGetValue(String section, List<String> fields,
+    {List<String>? where}) {
   final arguments = <String>[section];
   if (where != null) {
     arguments.add('where');
@@ -91,16 +91,16 @@ String _wmicGetValue(String section, List<String> fields,
   return _exec('wmic', arguments);
 }
 
-List<Map<String, String>> _wmicGetValueAsGroups(
+List<Map<String, String>>? _wmicGetValueAsGroups(
     String section, List<String> fields,
-    {List<String> where}) {
+    {List<String>? where}) {
   final string = _wmicGetValue(section, fields, where: where);
   return _fluent(string).stringToList().listToGroups('=').groupsValue;
 }
 
-Map<String, String> _wmicGetValueAsMap(String section, List<String> fields,
-    {List<String> where}) {
+Map<String, String>? _wmicGetValueAsMap(String section, List<String> fields,
+    {List<String>? where}) {
   final string = _wmicGetValue(section, fields, where: where);
   return _fluent(string).stringToList().listToMap('=').mapValue
-      as Map<String, String>;
+      as Map<String, String>?;
 }

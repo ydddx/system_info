@@ -44,67 +44,67 @@ abstract class SysInfo {
   ///
   ///     print(SysInfo.kernelArchitecture);
   ///     => i686
-  static final String kernelArchitecture = _getKernelArchitecture();
+  static final String? kernelArchitecture = _getKernelArchitecture();
 
   /// Returns the bintness of kernel.
   ///
   ///     print(SysInfo.kernelBitness);
   ///     => 32
-  static final int kernelBitness = _getKernelBitness();
+  static final int? kernelBitness = _getKernelBitness();
 
   /// Returns the name of kernel.
   ///
   ///     print(SysInfo.kernelName);
   ///     => Linux
-  static final String kernelName = _getKernelName();
+  static final String? kernelName = _getKernelName();
 
   /// Returns the version of kernel.
   ///
   ///     print(SysInfo.kernelVersion);
   ///     => 32
-  static final String kernelVersion = _getKernelVersion();
+  static final String? kernelVersion = _getKernelVersion();
 
   /// Returns the name of operating system.
   ///
   ///     print(SysInfo.operatingSystemName);
   ///     => Ubuntu
-  static final String operatingSystemName = _getOperatingSystemName();
+  static final String? operatingSystemName = _getOperatingSystemName();
 
   /// Returns the version of operating system.
   ///
   ///     print(SysInfo.operatingSystemVersion);
   ///     => 14.04
-  static final String operatingSystemVersion = _getOperatingSystemVersion();
+  static final String? operatingSystemVersion = _getOperatingSystemVersion();
 
   /// Returns the information about the processors.
   ///
   ///     print(SysInfo.processors.first.vendor);
   ///     => GenuineIntel
-  static final List<ProcessorInfo> processors = _getProcessors();
+  static final List<ProcessorInfo>? processors = _getProcessors();
 
   /// Returns the path of user home directory.
   ///
   ///     print(SysInfo.userDirectory);
   ///     => /home/andrew
-  static final String userDirectory = _getUserDirectory();
+  static final String? userDirectory = _getUserDirectory();
 
   /// Returns the identifier of current user.
   ///
   ///     print(SysInfo.userId);
   ///     => 1000
-  static final String userId = _getUserId();
+  static final String? userId = _getUserId();
 
   /// Returns the name of current user.
   ///
   ///     print(SysInfo.userName);
   ///     => 'Andrew'
-  static final String userName = _getUserName();
+  static final String? userName = _getUserName();
 
   /// Returns the bitness of the user space.
   ///
   ///     print(SysInfo.userSpaceBitness);
   ///     => 32
-  static final int userSpaceBitness = _getUserSpaceBitness();
+  static final int? userSpaceBitness = _getUserSpaceBitness();
 
   static final Map<String, String> _environment = Platform.environment;
 
@@ -116,31 +116,31 @@ abstract class SysInfo {
   ///
   ///     print(SysInfo.getFreePhysicalMemory());
   ///     => 3755331584
-  static int getFreePhysicalMemory() => _getFreePhysicalMemory();
+  static int? getFreePhysicalMemory() => _getFreePhysicalMemory();
 
   /// Returns the amount of free virtual memory in bytes.
   ///
   ///     print(SysInfo.getFreeVirtualMemory());
   ///     => 3755331584
-  static int getFreeVirtualMemory() => _getFreeVirtualMemory();
+  static int? getFreeVirtualMemory() => _getFreeVirtualMemory();
 
   /// Returns the amount of total physical memory in bytes.
   ///
   ///     print(SysInfo.getTotalPhysicalMemory());
   ///     => 3755331584
-  static int getTotalPhysicalMemory() => _getTotalPhysicalMemory();
+  static int? getTotalPhysicalMemory() => _getTotalPhysicalMemory();
 
   /// Returns the amount of total virtual memory in bytes.
   ///
   ///     print(SysInfo.getTotalVirtualMemory());
   ///     => 3755331584
-  static int getTotalVirtualMemory() => _getTotalVirtualMemory();
+  static int? getTotalVirtualMemory() => _getTotalVirtualMemory();
 
   /// Returns the amount of virtual memory in bytes used by the proccess.
   ///
   ///     print(SysInfo.getVirtualMemorySize());
   ///     => 123456
-  static int getVirtualMemorySize() => _getVirtualMemorySize();
+  static int? getVirtualMemorySize() => _getVirtualMemorySize();
 
   static ProcessorInfo _createUnknownProcessor() {
     return ProcessorInfo(architecture: ProcessorArchitecture.UNKNOWN);
@@ -150,7 +150,7 @@ abstract class SysInfo {
     throw UnsupportedError('Unsupported operating system.');
   }
 
-  static int _getFreePhysicalMemory() {
+  static int? _getFreePhysicalMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -167,7 +167,7 @@ abstract class SysInfo {
       case 'macos':
         return getFreeVirtualMemory();
       case 'windows':
-        final data = _wmicGetValueAsMap('OS', ['FreePhysicalMemory']);
+        final data = _wmicGetValueAsMap('OS', ['FreePhysicalMemory'])!;
         final value = _fluent(data['FreePhysicalMemory']).parseInt().intValue;
         return value * 1024;
       default:
@@ -177,7 +177,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static int _getFreeVirtualMemory() {
+  static int? _getFreeVirtualMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -207,7 +207,7 @@ abstract class SysInfo {
             .intValue;
         return free * pageSize;
       case 'windows':
-        final data = _wmicGetValueAsMap('OS', ['FreeVirtualMemory']);
+        final data = _wmicGetValueAsMap('OS', ['FreeVirtualMemory'])!;
         final free = _fluent(data['FreeVirtualMemory']).parseInt().intValue;
         return free * 1024;
       default:
@@ -217,7 +217,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getKernelArchitecture() {
+  static String? _getKernelArchitecture() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -238,7 +238,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static int _getKernelBitness() {
+  static int? _getKernelBitness() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -249,7 +249,7 @@ abstract class SysInfo {
         final paths = <String>[];
         final path = _resolveLink('/etc/ld.so.conf');
         if (path != null) {
-          _parseLdConf(path, paths, Set<String>());
+          _parseLdConf(path, paths, <String>{});
         }
 
         paths.add('/lib');
@@ -257,12 +257,12 @@ abstract class SysInfo {
         for (var path in paths) {
           final files = FileUtils.glob(pathos.join(path, 'libc.so.*'));
           for (var filePath in files) {
-            filePath = _resolveLink(filePath);
-            if (filePath == null) {
+            final resolvedFilePath = _resolveLink(filePath);
+            if (resolvedFilePath == null) {
               continue;
             }
 
-            final file = File(filePath);
+            final file = File(resolvedFilePath);
             if (file.existsSync()) {
               final fileType =
                   _fluent(_exec('file', ['-b', file.path])).trim().stringValue;
@@ -301,7 +301,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getKernelName() {
+  static String? _getKernelName() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -316,7 +316,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getKernelVersion() {
+  static String? _getKernelVersion() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -331,7 +331,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getOperatingSystemName() {
+  static String? _getOperatingSystemName() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -345,7 +345,7 @@ abstract class SysInfo {
             _fluent(_exec('sw_vers', [])).trim().stringToMap(':').mapValue;
         return _fluent(data['ProductName']).stringValue;
       case 'windows':
-        final data = _wmicGetValueAsMap('OS', ['Caption']);
+        final data = _wmicGetValueAsMap('OS', ['Caption'])!;
         return _fluent(data['Caption']).stringValue;
       default:
         _error();
@@ -354,7 +354,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getOperatingSystemVersion() {
+  static String? _getOperatingSystemVersion() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -368,7 +368,7 @@ abstract class SysInfo {
             _fluent(_exec('sw_vers', [])).trim().stringToMap(':').mapValue;
         return _fluent(data['ProductVersion']).stringValue;
       case 'windows':
-        final data = _wmicGetValueAsMap('OS', ['Version']);
+        final data = _wmicGetValueAsMap('OS', ['Version'])!;
         return _fluent(data['Version']).stringValue;
       default:
         _error();
@@ -377,7 +377,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static List<ProcessorInfo> _getProcessors() {
+  static List<ProcessorInfo>? _getProcessors() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -386,34 +386,34 @@ abstract class SysInfo {
             .trim()
             .stringToList()
             .listToGroups(':')
-            .groupsValue;
+            .groupsValue!;
 
         final processorGroups =
             groups.where((e) => e.keys.contains('processor'));
-        var cpuImplementer = '';
-        var cpuPart = '';
-        var hardware = '';
-        var processorName = '';
+        String? cpuImplementer = '';
+        String? cpuPart = '';
+        String? hardware = '';
+        String? processorName = '';
         for (final group in groups) {
-          if (cpuPart.isEmpty) {
+          if (cpuPart!.isEmpty) {
             cpuPart = _fluent(group['CPU part']).stringValue;
           }
 
-          if (hardware.isEmpty) {
+          if (hardware!.isEmpty) {
             hardware = _fluent(group['Hardware']).stringValue;
           }
 
-          if (cpuImplementer.isEmpty) {
+          if (cpuImplementer!.isEmpty) {
             cpuImplementer = _fluent(group['CPU implementer']).stringValue;
           }
 
-          if (processorName.isEmpty) {
+          if (processorName!.isEmpty) {
             processorName = _fluent(group['Processor']).stringValue;
           }
         }
 
         for (final group in processorGroups) {
-          var socket = 0;
+          int? socket = 0;
           if (_fluent(group['physical id']).stringValue.isNotEmpty) {
             socket = _fluent(group['physical id']).parseInt().intValue;
           } else {
@@ -422,7 +422,7 @@ abstract class SysInfo {
 
           var vendor = _fluent(group['vendor_id']).stringValue;
           final modelFields = const <String>['model name', 'cpu model'];
-          var name = '';
+          String? name = '';
           for (var field in modelFields) {
             name = _fluent(group[field]).stringValue;
             if (name.isNotEmpty) {
@@ -430,12 +430,12 @@ abstract class SysInfo {
             }
           }
 
-          if (name.isEmpty) {
+          if (name!.isEmpty) {
             name = processorName;
           }
 
           var architecture = ProcessorArchitecture.UNKNOWN;
-          if (name.startsWith('AMD')) {
+          if (name!.startsWith('AMD')) {
             architecture = ProcessorArchitecture.X86;
             final flags = _fluent(group['flags']).split(' ').listValue;
             if (flags.contains('lm')) {
@@ -464,7 +464,7 @@ abstract class SysInfo {
           }
 
           if (vendor.isEmpty) {
-            switch (cpuImplementer.toLowerCase()) {
+            switch (cpuImplementer!.toLowerCase()) {
               case '0x51':
                 vendor = 'Qualcomm';
                 break;
@@ -526,7 +526,7 @@ abstract class SysInfo {
           'Manufacturer',
           'Name',
           'NumberOfCores'
-        ]);
+        ])!;
         final numberOfSockets = groups.length;
         final processors = <ProcessorInfo>[];
         for (var i = 0; i < numberOfSockets; i++) {
@@ -581,7 +581,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static int _getTotalPhysicalMemory() {
+  static int? _getTotalPhysicalMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -607,7 +607,7 @@ abstract class SysInfo {
         return size * pageSize;
       case 'windows':
         final data =
-            _wmicGetValueAsMap('ComputerSystem', ['TotalPhysicalMemory']);
+            _wmicGetValueAsMap('ComputerSystem', ['TotalPhysicalMemory'])!;
         final value = _fluent(data['TotalPhysicalMemory']).parseInt().intValue;
         return value;
       default:
@@ -617,7 +617,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static int _getTotalVirtualMemory() {
+  static int? _getTotalVirtualMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -663,7 +663,7 @@ abstract class SysInfo {
             .intValue;
         return (free + active + inactive + speculative + wired) * pageSize;
       case 'windows':
-        final data = _wmicGetValueAsMap('OS', ['TotalVirtualMemorySize']);
+        final data = _wmicGetValueAsMap('OS', ['TotalVirtualMemorySize'])!;
         final value =
             _fluent(data['TotalVirtualMemorySize']).parseInt().intValue;
         return value * 1024;
@@ -674,7 +674,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getUserDirectory() {
+  static String? _getUserDirectory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -689,7 +689,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getUserId() {
+  static String? _getUserId() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -697,7 +697,7 @@ abstract class SysInfo {
         return _fluent(_exec('id', ['-u'])).trim().stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('UserAccount', ['SID'],
-            where: ['Name=\'$userName\'']);
+            where: ['Name=\'$userName\''])!;
         return _fluent(data['SID']).stringValue;
       default:
         _error();
@@ -706,14 +706,14 @@ abstract class SysInfo {
     return null;
   }
 
-  static String _getUserName() {
+  static String? _getUserName() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
       case 'macos':
         return _fluent(_exec('whoami', [])).trim().stringValue;
       case 'windows':
-        final data = _wmicGetValueAsMap('ComputerSystem', ['UserName']);
+        final data = _wmicGetValueAsMap('ComputerSystem', ['UserName'])!;
         return _fluent(data['UserName']).split('\\').last().stringValue;
       default:
         _error();
@@ -722,7 +722,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static int _getUserSpaceBitness() {
+  static int? _getUserSpaceBitness() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -738,8 +738,6 @@ abstract class SysInfo {
         } else {
           return kernelBitness;
         }
-
-        break;
       case 'windows':
         final wow64 =
             _fluent(_environment['PROCESSOR_ARCHITEW6432']).stringValue;
@@ -761,7 +759,7 @@ abstract class SysInfo {
     return null;
   }
 
-  static int _getVirtualMemorySize() {
+  static int? _getVirtualMemorySize() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -774,7 +772,7 @@ abstract class SysInfo {
         return size * 1024;
       case 'windows':
         final data = _wmicGetValueAsMap('Process', ['VirtualSize'],
-            where: ['Handle=\'$pid\'']);
+            where: ['Handle=\'$pid\''])!;
         final value = _fluent(data['VirtualSize']).parseInt().intValue;
         return value;
       default:
