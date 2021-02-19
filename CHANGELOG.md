@@ -1,3 +1,7 @@
+## 1.0.0
+
+- The source code has been migrated to null safety. Thanks to the author of this work, Brett Sutton (github.com/bsutton).
+
 ## 0.1.3
 
 - Minor changes in processor architecture recognition

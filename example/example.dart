@@ -11,7 +11,7 @@ void main() {
   print('User id                 : ${SysInfo.userId}');
   print('User name               : ${SysInfo.userName}');
   print('User space bitness      : ${SysInfo.userSpaceBitness}');
-  final processors = SysInfo.processors!;
+  final processors = SysInfo.processors;
   print('Number of processors    : ${processors.length}');
   for (var processor in processors) {
     print('  Architecture          : ${processor.architecture}');
@@ -20,15 +20,15 @@ void main() {
     print('  Vendor                : ${processor.vendor}');
   }
   print(
-      'Total physical memory   : ${SysInfo.getTotalPhysicalMemory()! ~/ MEGABYTE} MB');
+      'Total physical memory   : ${SysInfo.getTotalPhysicalMemory() ~/ MEGABYTE} MB');
   print(
-      'Free physical memory    : ${SysInfo.getFreePhysicalMemory()! ~/ MEGABYTE} MB');
+      'Free physical memory    : ${SysInfo.getFreePhysicalMemory() ~/ MEGABYTE} MB');
   print(
-      'Total virtual memory    : ${SysInfo.getTotalVirtualMemory()! ~/ MEGABYTE} MB');
+      'Total virtual memory    : ${SysInfo.getTotalVirtualMemory() ~/ MEGABYTE} MB');
   print(
-      'Free virtual memory     : ${SysInfo.getFreeVirtualMemory()! ~/ MEGABYTE} MB');
+      'Free virtual memory     : ${SysInfo.getFreeVirtualMemory() ~/ MEGABYTE} MB');
   print(
-      'Virtual memory size     : ${SysInfo.getVirtualMemorySize()! ~/ MEGABYTE} MB');
+      'Virtual memory size     : ${SysInfo.getVirtualMemorySize() ~/ MEGABYTE} MB');
 }
 
 const int MEGABYTE = 1024 * 1024;

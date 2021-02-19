@@ -44,67 +44,67 @@ abstract class SysInfo {
   ///
   ///     print(SysInfo.kernelArchitecture);
   ///     => i686
-  static final String? kernelArchitecture = _getKernelArchitecture();
+  static final String kernelArchitecture = _getKernelArchitecture();
 
   /// Returns the bintness of kernel.
   ///
   ///     print(SysInfo.kernelBitness);
   ///     => 32
-  static final int? kernelBitness = _getKernelBitness();
+  static final int kernelBitness = _getKernelBitness();
 
   /// Returns the name of kernel.
   ///
   ///     print(SysInfo.kernelName);
   ///     => Linux
-  static final String? kernelName = _getKernelName();
+  static final String kernelName = _getKernelName();
 
   /// Returns the version of kernel.
   ///
   ///     print(SysInfo.kernelVersion);
   ///     => 32
-  static final String? kernelVersion = _getKernelVersion();
+  static final String kernelVersion = _getKernelVersion();
 
   /// Returns the name of operating system.
   ///
   ///     print(SysInfo.operatingSystemName);
   ///     => Ubuntu
-  static final String? operatingSystemName = _getOperatingSystemName();
+  static final String operatingSystemName = _getOperatingSystemName();
 
   /// Returns the version of operating system.
   ///
   ///     print(SysInfo.operatingSystemVersion);
   ///     => 14.04
-  static final String? operatingSystemVersion = _getOperatingSystemVersion();
+  static final String operatingSystemVersion = _getOperatingSystemVersion();
 
   /// Returns the information about the processors.
   ///
   ///     print(SysInfo.processors.first.vendor);
   ///     => GenuineIntel
-  static final List<ProcessorInfo>? processors = _getProcessors();
+  static final List<ProcessorInfo> processors = _getProcessors();
 
   /// Returns the path of user home directory.
   ///
   ///     print(SysInfo.userDirectory);
   ///     => /home/andrew
-  static final String? userDirectory = _getUserDirectory();
+  static final String userDirectory = _getUserDirectory();
 
   /// Returns the identifier of current user.
   ///
   ///     print(SysInfo.userId);
   ///     => 1000
-  static final String? userId = _getUserId();
+  static final String userId = _getUserId();
 
   /// Returns the name of current user.
   ///
   ///     print(SysInfo.userName);
   ///     => 'Andrew'
-  static final String? userName = _getUserName();
+  static final String userName = _getUserName();
 
   /// Returns the bitness of the user space.
   ///
   ///     print(SysInfo.userSpaceBitness);
   ///     => 32
-  static final int? userSpaceBitness = _getUserSpaceBitness();
+  static final int userSpaceBitness = _getUserSpaceBitness();
 
   static final Map<String, String> _environment = Platform.environment;
 
@@ -116,41 +116,41 @@ abstract class SysInfo {
   ///
   ///     print(SysInfo.getFreePhysicalMemory());
   ///     => 3755331584
-  static int? getFreePhysicalMemory() => _getFreePhysicalMemory();
+  static int getFreePhysicalMemory() => _getFreePhysicalMemory();
 
   /// Returns the amount of free virtual memory in bytes.
   ///
   ///     print(SysInfo.getFreeVirtualMemory());
   ///     => 3755331584
-  static int? getFreeVirtualMemory() => _getFreeVirtualMemory();
+  static int getFreeVirtualMemory() => _getFreeVirtualMemory();
 
   /// Returns the amount of total physical memory in bytes.
   ///
   ///     print(SysInfo.getTotalPhysicalMemory());
   ///     => 3755331584
-  static int? getTotalPhysicalMemory() => _getTotalPhysicalMemory();
+  static int getTotalPhysicalMemory() => _getTotalPhysicalMemory();
 
   /// Returns the amount of total virtual memory in bytes.
   ///
   ///     print(SysInfo.getTotalVirtualMemory());
   ///     => 3755331584
-  static int? getTotalVirtualMemory() => _getTotalVirtualMemory();
+  static int getTotalVirtualMemory() => _getTotalVirtualMemory();
 
   /// Returns the amount of virtual memory in bytes used by the proccess.
   ///
   ///     print(SysInfo.getVirtualMemorySize());
   ///     => 123456
-  static int? getVirtualMemorySize() => _getVirtualMemorySize();
+  static int getVirtualMemorySize() => _getVirtualMemorySize();
 
   static ProcessorInfo _createUnknownProcessor() {
     return ProcessorInfo(architecture: ProcessorArchitecture.UNKNOWN);
   }
 
-  static dynamic _error() {
+  static Never _error() {
     throw UnsupportedError('Unsupported operating system.');
   }
 
-  static int? _getFreePhysicalMemory() {
+  static int _getFreePhysicalMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -173,11 +173,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static int? _getFreeVirtualMemory() {
+  static int _getFreeVirtualMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -213,11 +211,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getKernelArchitecture() {
+  static String _getKernelArchitecture() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -234,11 +230,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static int? _getKernelBitness() {
+  static int _getKernelBitness() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -297,11 +291,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getKernelName() {
+  static String _getKernelName() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -312,11 +304,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getKernelVersion() {
+  static String _getKernelVersion() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -327,11 +317,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getOperatingSystemName() {
+  static String _getOperatingSystemName() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -350,11 +338,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getOperatingSystemVersion() {
+  static String _getOperatingSystemVersion() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -373,11 +359,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static List<ProcessorInfo>? _getProcessors() {
+  static List<ProcessorInfo> _getProcessors() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -577,11 +561,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static int? _getTotalPhysicalMemory() {
+  static int _getTotalPhysicalMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -613,11 +595,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static int? _getTotalVirtualMemory() {
+  static int _getTotalVirtualMemory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -670,11 +650,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getUserDirectory() {
+  static String _getUserDirectory() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -685,11 +663,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getUserId() {
+  static String _getUserId() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -702,11 +678,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static String? _getUserName() {
+  static String _getUserName() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -718,11 +692,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static int? _getUserSpaceBitness() {
+  static int _getUserSpaceBitness() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -755,11 +727,9 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 
-  static int? _getVirtualMemorySize() {
+  static int _getVirtualMemorySize() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
@@ -778,7 +748,5 @@ abstract class SysInfo {
       default:
         _error();
     }
-
-    return null;
   }
 }
