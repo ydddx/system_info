@@ -4,7 +4,7 @@ author: Andrew Mezoni <andrew.mezoni@gmail.com>
 description: Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 homepage: https://github.com/mezoni/system_info
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 dependencies:
   file_utils: ^1.0.0
   path: ^1.8.0
