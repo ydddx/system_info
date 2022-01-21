@@ -3,7 +3,7 @@ part of system_info;
 _Fluent _fluent(Object? value) => _Fluent(value);
 
 class _Fluent {
-  dynamic? value;
+  dynamic value;
 
   _Fluent(this.value);
 

@@ -1,12 +1,11 @@
-name: system_info
-version: 1.0.1
-author: Andrew Mezoni <andrew.mezoni@gmail.com>
+name: system_info2
+version: 2.0.0
+homepage: https://github.com/bsutton/system_info
 description: Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
-homepage: https://github.com/mezoni/system_info
-environment:
+environment: 
   sdk: '>=2.12.0 <3.0.0'
-dependencies:
+dependencies: 
   file_utils: ^1.0.0
   path: ^1.8.0
-dev_dependencies:  
+dev_dependencies: 
   pedantic: ^1.10.0

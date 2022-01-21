@@ -1,9 +1,7 @@
 system_info
 =====
 
-This package is no longer supported because it was flagged by Google Dart developers as being published by an unknown person.  
-Publisher Unknown.  
-As a normal person, I believe that hardly anyone would want to use software from unknown publishers.  
+A fork of system_info as the original maintainer no longer wishes to do so.
 
 Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 
