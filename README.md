@@ -3,6 +3,8 @@ system_info
 
 A fork of system_info as the original maintainer no longer wishes to do so.
 
+Thanks to onepub.dev for allowing me the time and resources to support this package.
+
 Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 
 Warning! Not tested on Mac OS X!

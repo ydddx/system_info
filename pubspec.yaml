@@ -1,5 +1,5 @@
 name: system_info2
-version: 2.0.0
+version: 2.0.1
 homepage: https://github.com/bsutton/system_info
 description: Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 environment: 
