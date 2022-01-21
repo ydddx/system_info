@@ -8,4 +8,5 @@ dependencies:
   file_utils: ^1.0.0
   path: ^1.8.0
 dev_dependencies: 
+  lint_hard: ^1.0.4
   pedantic: ^1.10.0
