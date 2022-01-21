@@ -1,11 +1,14 @@
-part of system_info;
+// ignore_for_file: avoid_dynamic_calls, avoid_catches_without_on_clauses
+//, strict_raw_type
+
+part of system_info2;
 
 _Fluent _fluent(Object? value) => _Fluent(value);
 
 class _Fluent {
-  dynamic value;
-
   _Fluent(this.value);
+
+  dynamic value;
 
   List<Map<String, String>>? get groupsValue {
     if (value is List<Map<String, String>>) {
@@ -23,20 +26,22 @@ class _Fluent {
     return 0;
   }
 
+  // ignore: strict_raw_type
   List get listValue {
     if (value is List) {
       return value as List;
     }
 
-    return [];
+    return <dynamic>[];
   }
 
+  // ignore: strict_raw_type
   Map get mapValue {
     if (value is Map) {
       return value as Map;
     }
 
-    return {};
+    return <dynamic, dynamic>{};
   }
 
   String get stringValue {
@@ -53,11 +58,10 @@ class _Fluent {
     } catch (e) {
       value = null;
     }
-
     return this;
   }
 
-  _Fluent elementAt(int index, [Object? defaultValue]) {
+  void elementAt(int index, [Object? defaultValue]) {
     try {
       value = value[index];
     } catch (e) {
@@ -67,11 +71,9 @@ class _Fluent {
     if (value == null && defaultValue != null) {
       value = defaultValue;
     }
-
-    return this;
   }
 
-  _Fluent exec(String executable, List<String> arguments,
+  void exec(String executable, List<String> arguments,
       {bool runInShell = false}) {
     try {
       final result =
@@ -82,30 +84,26 @@ class _Fluent {
     } catch (e) {
       value = null;
     }
-
-    return this;
   }
 
-  _Fluent last() {
+  void last() {
     if (value is Iterable) {
       value = value.last;
     } else {
       value = null;
     }
-
-    return this;
   }
 
-  _Fluent listToGroups(String separator) {
+  void listToGroups(String separator) {
     final result = <Map<String, String>>[];
     if (value is! List) {
       value = result;
-      return this;
+      return;
     }
 
     final list = value as List;
     Map<String, String>? map;
-    for (var element in list) {
+    for (final element in list) {
       final string = element.toString();
       final index = string.indexOf(separator);
       if (index != -1) {
@@ -128,18 +126,17 @@ class _Fluent {
     }
 
     value = result;
-    return this;
   }
 
-  _Fluent listToMap(String separator) {
+  void listToMap(String separator) {
     if (value is! List) {
       value = <String, String>{};
-      return this;
+      return;
     }
 
     final list = value as List;
     final map = <String, String>{};
-    for (var element in list) {
+    for (final element in list) {
       final string = element.toString();
       final index = string.indexOf(separator);
       if (index != -1) {
@@ -150,50 +147,42 @@ class _Fluent {
     }
 
     value = map;
-    return this;
   }
 
-  _Fluent parseInt([int defaultValue = 0]) {
+  void parseInt([int defaultValue = 0]) {
     if (value == null) {
       value = defaultValue;
     } else {
       value = int.tryParse(value.toString()) ?? defaultValue;
     }
-
-    return this;
   }
 
-  _Fluent replaceAll(String from, String replace) {
+  void replaceAll(String from, String replace) {
     value = value.toString().replaceAll(from, replace);
-    return this;
   }
 
-  _Fluent split(String separtor) {
+  void split(String separtor) {
     value = value.toString().split(separtor);
-    return this;
   }
 
-  _Fluent stringToList() {
+  void stringToList() {
     if (value == null) {
       value = <String>[];
-      return this;
+      return;
     }
 
     var string = value.toString();
     string = string.replaceAll('\r\n', '\n');
     //string = string.replaceAll('\r', '\n');
     value = string.split('\n');
-    return this;
   }
 
-  _Fluent stringToMap(String separator) {
+  void stringToMap(String separator) {
     stringToList();
     listToMap(separator);
-    return this;
   }
 
-  _Fluent trim() {
+  void trim() {
     value = value.toString().trim();
-    return this;
   }
 }

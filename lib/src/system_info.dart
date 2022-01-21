@@ -214,21 +214,22 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final data = _fluent(_exec('cat', ['/proc/meminfo']))
-            .trim()
-            .stringToMap(':')
-            .mapValue;
-        final value = _fluent(data['MemFree'])
-            .split(' ')
-            .elementAt(0)
-            .parseInt()
+        final data = (_fluent(_exec('cat', ['/proc/meminfo']))
+          ..trim()
+          ..stringToMap(':'))
+          ..mapValue;
+        final value = (_fluent(data['MemFree'])
+              ..split(' ')
+              ..elementAt(0)
+              ..parseInt())
             .intValue;
         return value * 1024;
       case 'macos':
         return getFreeVirtualMemory();
       case 'windows':
         final data = _wmicGetValueAsMap('OS', ['FreePhysicalMemory'])!;
-        final value = _fluent(data['FreePhysicalMemory']).parseInt().intValue;
+        final value =
+            (_fluent(data['FreePhysicalMemory'])..parseInt()).intValue;
         return value * 1024;
       default:
         _error();
@@ -239,34 +240,38 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final data = _fluent(_exec('cat', ['/proc/meminfo']))
-            .trim()
-            .stringToMap(':')
+        final data = (_fluent(_exec('cat', ['/proc/meminfo']))
+              ..trim()
+              ..stringToMap(':'))
             .mapValue;
-        final physical = _fluent(data['MemFree'])
-            .split(' ')
-            .elementAt(0)
-            .parseInt()
+        final physical = (_fluent(data['MemFree'])
+              ..split(' ')
+              ..elementAt(0)
+              ..parseInt())
             .intValue;
-        final swap = _fluent(data['SwapFree'])
-            .split(' ')
-            .elementAt(0)
-            .parseInt()
+        final swap = (_fluent(data['SwapFree'])
+              ..split(' ')
+              ..elementAt(0)
+              ..parseInt())
             .intValue;
         return (physical + swap) * 1024;
       case 'macos':
-        final data =
-            _fluent(_exec('vm_stat', [])).trim().stringToMap(':').mapValue;
-        final free =
-            _fluent(data['Pages free']).replaceAll('.', '').parseInt().intValue;
-        final pageSize = _fluent(_exec('sysctl', ['-n', 'hw.pagesize']))
-            .trim()
-            .parseInt()
+        final data = (_fluent(_exec('vm_stat', []))
+              ..trim()
+              ..stringToMap(':'))
+            .mapValue;
+        final free = (_fluent(data['Pages free'])
+              ..replaceAll('.', '')
+              ..parseInt())
+            .intValue;
+        final pageSize = (_fluent(_exec('sysctl', ['-n', 'hw.pagesize']))
+              ..trim()
+              ..parseInt())
             .intValue;
         return free * pageSize;
       case 'windows':
         final data = _wmicGetValueAsMap('OS', ['FreeVirtualMemory'])!;
-        final free = _fluent(data['FreeVirtualMemory']).parseInt().intValue;
+        final free = (_fluent(data['FreeVirtualMemory'])..parseInt()).intValue;
         return free * 1024;
       default:
         _error();
@@ -278,7 +283,7 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
       case 'macos':
-        return _fluent(_exec('uname', ['-m'])).trim().stringValue;
+        return (_fluent(_exec('uname', ['-m']))..trim()).stringValue;
       case 'windows':
         final wow64 =
             _fluent(_environment['PROCESSOR_ARCHITEW6432']).stringValue;
@@ -318,8 +323,9 @@ abstract class SysInfo {
 
             final file = File(resolvedFilePath);
             if (file.existsSync()) {
-              final fileType =
-                  _fluent(_exec('file', ['-b', file.path])).trim().stringValue;
+              final fileType = (_fluent(_exec('file', ['-b', file.path]))
+                    ..trim())
+                  .stringValue;
               if (fileType.startsWith('ELF 64-bit')) {
                 return 64;
               }
@@ -329,7 +335,7 @@ abstract class SysInfo {
 
         return 32;
       case 'macos':
-        if (_fluent(_exec('uname', ['-m'])).trim().stringValue == 'x86_64') {
+        if ((_fluent(_exec('uname', ['-m']))..trim()).stringValue == 'x86_64') {
           return 64;
         }
 
@@ -358,7 +364,7 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
       case 'macos':
-        return _fluent(_exec('uname', ['-s'])).trim().stringValue;
+        return (_fluent(_exec('uname', ['-s']))..trim()).stringValue;
       case 'windows':
         return _fluent(_environment['OS']).stringValue;
       default:
@@ -371,7 +377,7 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
       case 'macos':
-        return _fluent(_exec('uname', ['-r'])).trim().stringValue;
+        return (_fluent(_exec('uname', ['-r']))..trim()).stringValue;
       case 'windows':
         return operatingSystemVersion;
       default:
@@ -383,14 +389,16 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final data = _fluent(_exec('lsb_release', ['-a']))
-            .trim()
-            .stringToMap(':')
+        final data = (_fluent(_exec('lsb_release', ['-a']))
+              ..trim()
+              ..stringToMap(':'))
             .mapValue;
         return _fluent(data['Distributor ID']).stringValue;
       case 'macos':
-        final data =
-            _fluent(_exec('sw_vers', [])).trim().stringToMap(':').mapValue;
+        final data = (_fluent(_exec('sw_vers', []))
+              ..trim()
+              ..stringToMap(':'))
+            .mapValue;
         return _fluent(data['ProductName']).stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('OS', ['Caption'])!;
@@ -404,14 +412,16 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final data = _fluent(_exec('lsb_release', ['-a']))
-            .trim()
-            .stringToMap(':')
+        final data = (_fluent(_exec('lsb_release', ['-a']))
+              ..trim()
+              ..stringToMap(':'))
             .mapValue;
         return _fluent(data['Release']).stringValue;
       case 'macos':
-        final data =
-            _fluent(_exec('sw_vers', [])).trim().stringToMap(':').mapValue;
+        final data = (_fluent(_exec('sw_vers', []))
+              ..trim()
+              ..stringToMap(':'))
+            .mapValue;
         return _fluent(data['ProductVersion']).stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('OS', ['Version'])!;
@@ -426,10 +436,10 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
         final cores = <CoreInfo>[];
-        final groups = _fluent(_exec('cat', ['/proc/cpuinfo']))
-            .trim()
-            .stringToList()
-            .listToGroups(':')
+        final groups = (_fluent(_exec('cat', ['/proc/cpuinfo']))
+              ..trim()
+              ..stringToList()
+              ..listToGroups(':'))
             .groupsValue!;
 
         final processorGroups =
@@ -459,9 +469,9 @@ abstract class SysInfo {
         for (final group in processorGroups) {
           int? socket = 0;
           if (_fluent(group['physical id']).stringValue.isNotEmpty) {
-            socket = _fluent(group['physical id']).parseInt().intValue;
+            socket = (_fluent(group['physical id'])..parseInt()).intValue;
           } else {
-            socket = _fluent(group['processor']).parseInt().intValue;
+            socket = (_fluent(group['processor'])..parseInt()).intValue;
           }
 
           var vendor = _fluent(group['vendor_id']).stringValue;
@@ -481,13 +491,13 @@ abstract class SysInfo {
           var architecture = ProcessorArchitecture.unknown;
           if (name!.startsWith('AMD')) {
             architecture = ProcessorArchitecture.x86;
-            final flags = _fluent(group['flags']).split(' ').listValue;
+            final flags = (_fluent(group['flags'])..split(' ')).listValue;
             if (flags.contains('lm')) {
               architecture = ProcessorArchitecture.x86_64;
             }
           } else if (name.startsWith('Intel')) {
             architecture = ProcessorArchitecture.x86;
-            final flags = _fluent(group['flags']).split(' ').listValue;
+            final flags = (_fluent(group['flags'])..split(' ')).listValue;
             if (flags.contains('lm')) {
               architecture = ProcessorArchitecture.x86_64;
             }
@@ -497,7 +507,7 @@ abstract class SysInfo {
             }
           } else if (name.startsWith('ARM')) {
             architecture = ProcessorArchitecture.arm;
-            final features = _fluent(group['Features']).split(' ').listValue;
+            final features = (_fluent(group['Features'])..split(' ')).listValue;
             if (features.contains('fp')) {
               architecture = ProcessorArchitecture.aarch64;
             }
@@ -530,22 +540,22 @@ abstract class SysInfo {
 
         return UnmodifiableListView(cores);
       case 'macos':
-        final data = _fluent(_exec('sysctl', ['machdep.cpu']))
-            .trim()
-            .stringToMap(':')
+        final data = (_fluent(_exec('sysctl', ['machdep.cpu']))
+              ..trim()
+              ..stringToMap(':'))
             .mapValue;
         var architecture = ProcessorArchitecture.unknown;
         if (data['machdep.cpu.vendor'] == 'GenuineIntel') {
           architecture = ProcessorArchitecture.x86;
           final extfeatures =
-              _fluent(data['machdep.cpu.extfeatures']).split(' ').listValue;
+              (_fluent(data['machdep.cpu.extfeatures'])..split(' ')).listValue;
           if (extfeatures.contains('EM64T')) {
             architecture = ProcessorArchitecture.x86_64;
           }
         }
 
         final numberOfCores =
-            _fluent(data['machdep.cpu.core_count']).parseInt().intValue;
+            (_fluent(data['machdep.cpu.core_count'])..parseInt()).intValue;
         final processors = <CoreInfo>[];
         for (var i = 0; i < numberOfCores; i++) {
           final name = _fluent(data['machdep.cpu.brand_string']).stringValue;
@@ -573,9 +583,9 @@ abstract class SysInfo {
         for (var i = 0; i < numberOfSockets; i++) {
           final data = groups[i];
           final numberOfCores =
-              _fluent(data['NumberOfCores']).parseInt().intValue;
+              (_fluent(data['NumberOfCores'])..parseInt()).intValue;
           var architecture = ProcessorArchitecture.unknown;
-          switch (_fluent(data['Architecture']).parseInt().intValue) {
+          switch ((_fluent(data['Architecture'])..parseInt()).intValue) {
             case 0:
               architecture = ProcessorArchitecture.x86;
               break;
@@ -583,7 +593,7 @@ abstract class SysInfo {
               architecture = ProcessorArchitecture.mips;
               break;
             case 5:
-              switch (_fluent(data['DataWidth']).parseInt().intValue) {
+              switch ((_fluent(data['DataWidth'])..parseInt()).intValue) {
                 case 32:
                   architecture = ProcessorArchitecture.arm;
                   break;
@@ -624,30 +634,31 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final data = _fluent(_exec('cat', ['/proc/meminfo']))
-            .trim()
-            .stringToMap(':')
+        final data = (_fluent(_exec('cat', ['/proc/meminfo']))
+              ..trim()
+              ..stringToMap(':'))
             .mapValue;
-        final value = _fluent(data['MemTotal'])
-            .split(' ')
-            .elementAt(0)
-            .parseInt()
+        final value = (_fluent(data['MemTotal'])
+              ..split(' ')
+              ..elementAt(0)
+              ..parseInt())
             .intValue;
         return value * 1024;
       case 'macos':
-        final pageSize = _fluent(_exec('sysctl', ['-n', 'hw.pagesize']))
-            .trim()
-            .parseInt()
+        final pageSize = (_fluent(_exec('sysctl', ['-n', 'hw.pagesize']))
+              ..trim()
+              ..parseInt())
             .intValue;
-        final size = _fluent(_exec('sysctl', ['-n', 'hw.memsize']))
-            .trim()
-            .parseInt()
+        final size = (_fluent(_exec('sysctl', ['-n', 'hw.memsize']))
+              ..trim()
+              ..parseInt())
             .intValue;
         return size * pageSize;
       case 'windows':
         final data =
             _wmicGetValueAsMap('ComputerSystem', ['TotalPhysicalMemory'])!;
-        final value = _fluent(data['TotalPhysicalMemory']).parseInt().intValue;
+        final value =
+            (_fluent(data['TotalPhysicalMemory'])..parseInt()).intValue;
         return value;
       default:
         _error();
@@ -658,51 +669,55 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final data = _fluent(_exec('cat', ['/proc/meminfo']))
-            .trim()
-            .stringToMap(':')
+        final data = (_fluent(_exec('cat', ['/proc/meminfo']))
+              ..trim()
+              ..stringToMap(':'))
             .mapValue;
-        final physical = _fluent(data['MemTotal'])
-            .split(' ')
-            .elementAt(0)
-            .parseInt()
+        final physical = (_fluent(data['MemTotal'])
+              ..split(' ')
+              ..elementAt(0)
+              ..parseInt())
             .intValue;
-        final swap = _fluent(data['SwapTotal'])
-            .split(' ')
-            .elementAt(0)
-            .parseInt()
+        final swap = (_fluent(data['SwapTotal'])
+              ..split(' ')
+              ..elementAt(0)
+              ..parseInt())
             .intValue;
         return (physical + swap) * 1024;
       case 'macos':
-        final data =
-            _fluent(_exec('vm_stat', [])).trim().stringToMap(':').mapValue;
-        final free =
-            _fluent(data['Pages free']).replaceAll('.', '').parseInt().intValue;
-        final active = _fluent(data['Pages active'])
-            .replaceAll('.', '')
-            .parseInt()
+        final data = (_fluent(_exec('vm_stat', []))
+              ..trim()
+              ..stringToMap(':'))
+            .mapValue;
+        final free = (_fluent(data['Pages free'])
+              ..replaceAll('.', '')
+              ..parseInt())
             .intValue;
-        final inactive = _fluent(data['Pages inactive'])
-            .replaceAll('.', '')
-            .parseInt()
+        final active = (_fluent(data['Pages active'])
+              ..replaceAll('.', '')
+              ..parseInt())
             .intValue;
-        final speculative = _fluent(data['Pages speculative'])
-            .replaceAll('.', '')
-            .parseInt()
+        final inactive = (_fluent(data['Pages inactive'])
+              ..replaceAll('.', '')
+              ..parseInt())
             .intValue;
-        final wired = _fluent(data['Pages wired down'])
-            .replaceAll('.', '')
-            .parseInt()
+        final speculative = (_fluent(data['Pages speculative'])
+              ..replaceAll('.', '')
+              ..parseInt())
             .intValue;
-        final pageSize = _fluent(_exec('sysctl', ['-n', 'hw.pagesize']))
-            .trim()
-            .parseInt()
+        final wired = (_fluent(data['Pages wired down'])
+              ..replaceAll('.', '')
+              ..parseInt())
+            .intValue;
+        final pageSize = (_fluent(_exec('sysctl', ['-n', 'hw.pagesize']))
+              ..trim()
+              ..parseInt())
             .intValue;
         return (free + active + inactive + speculative + wired) * pageSize;
       case 'windows':
         final data = _wmicGetValueAsMap('OS', ['TotalVirtualMemorySize'])!;
         final value =
-            _fluent(data['TotalVirtualMemorySize']).parseInt().intValue;
+            (_fluent(data['TotalVirtualMemorySize'])..parseInt()).intValue;
         return value * 1024;
       default:
         _error();
@@ -727,7 +742,7 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
       case 'macos':
-        return _fluent(_exec('id', ['-u'])).trim().stringValue;
+        return (_fluent(_exec('id', ['-u']))..trim()).stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('UserAccount', ['SID'],
             where: ["Name='$userName'"])!;
@@ -742,10 +757,13 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
       case 'macos':
-        return _fluent(_exec('whoami', [])).trim().stringValue;
+        return (_fluent(_exec('whoami', []))..trim()).stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('ComputerSystem', ['UserName'])!;
-        return _fluent(data['UserName']).split(r'\').last().stringValue;
+        return (_fluent(data['UserName'])
+              ..split(r'\')
+              ..last())
+            .stringValue;
       default:
         _error();
     }
@@ -755,9 +773,9 @@ abstract class SysInfo {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        return _fluent(_exec('getconf', ['LONG_BIT']))
-            .trim()
-            .parseInt()
+        return (_fluent(_exec('getconf', ['LONG_BIT']))
+              ..trim()
+              ..parseInt())
             .intValue;
       case 'macos':
         if (Platform.version.contains('macos_ia32')) {
@@ -791,16 +809,16 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
       case 'macos':
-        final data = _fluent(_exec('ps', ['-o', 'vsz', '-p', '$pid']))
-            .trim()
-            .stringToList()
+        final data = (_fluent(_exec('ps', ['-o', 'vsz', '-p', '$pid']))
+              ..trim()
+              ..stringToList())
             .listValue;
-        final size = _fluent(data.elementAt(1)).parseInt().intValue;
+        final size = (_fluent(data.elementAt(1))..parseInt()).intValue;
         return size * 1024;
       case 'windows':
         final data = _wmicGetValueAsMap('Process', ['VirtualSize'],
             where: ["Handle='$pid'"])!;
-        final value = _fluent(data['VirtualSize']).parseInt().intValue;
+        final value = (_fluent(data['VirtualSize'])..parseInt()).intValue;
         return value;
       default:
         _error();

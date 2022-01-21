@@ -100,12 +100,17 @@ List<Map<String, String>>? _wmicGetValueAsGroups(
     String section, List<String> fields,
     {List<String>? where}) {
   final string = _wmicGetValue(section, fields, where: where);
-  return _fluent(string).stringToList().listToGroups('=').groupsValue;
+  return (_fluent(string)
+        ..stringToList()
+        ..listToGroups('='))
+      .groupsValue;
 }
 
 Map<String, String>? _wmicGetValueAsMap(String section, List<String> fields,
     {List<String>? where}) {
   final string = _wmicGetValue(section, fields, where: where);
-  return _fluent(string).stringToList().listToMap('=').mapValue
-      as Map<String, String>?;
+  return (_fluent(string)
+        ..stringToList()
+        ..listToMap('='))
+      .mapValue as Map<String, String>?;
 }
