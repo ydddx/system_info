@@ -1,29 +1,64 @@
-part of system_info;
+part of system_info2;
 
 class ProcessorArchitecture {
+  const ProcessorArchitecture(this.name);
+
+  @Deprecated('use arch64')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture AARCH64 = ProcessorArchitecture('AARCH64');
 
+  @Deprecated('use arm')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture ARM = ProcessorArchitecture('ARM');
 
+  @Deprecated('use ia64')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture IA64 = ProcessorArchitecture('IA64');
 
+  @Deprecated('use mips')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture MIPS = ProcessorArchitecture('MIPS');
 
+  @Deprecated('use x86')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture X86 = ProcessorArchitecture('X86');
 
+  @Deprecated('use x86_64')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture X86_64 = ProcessorArchitecture('X86_64');
 
+  @Deprecated('use unknown')
+  // ignore: constant_identifier_names
   static const ProcessorArchitecture UNKNOWN = ProcessorArchitecture('UNKNOWN');
 
-  final String name;
+  static const ProcessorArchitecture aarch64 = ProcessorArchitecture('AARCH64');
 
-  const ProcessorArchitecture(this.name);
+  static const ProcessorArchitecture arm = ProcessorArchitecture('ARM');
+
+  static const ProcessorArchitecture ia64 = ProcessorArchitecture('IA64');
+
+  static const ProcessorArchitecture mips = ProcessorArchitecture('MIPS');
+
+  static const ProcessorArchitecture x86 = ProcessorArchitecture('X86');
+
+  static const ProcessorArchitecture x86_64 = ProcessorArchitecture('X86_64');
+
+  static const ProcessorArchitecture unknown = ProcessorArchitecture('UNKNOWN');
+
+  final String name;
 
   @override
   String toString() => name;
 }
 
+@Deprecated('User CoreInfo instead')
 class ProcessorInfo {
+  ProcessorInfo(
+      {this.architecture = ProcessorArchitecture.UNKNOWN,
+      this.name = '',
+      this.socket = 0,
+      this.vendor = ''});
+
   final ProcessorArchitecture architecture;
 
   final String name;
@@ -31,15 +66,28 @@ class ProcessorInfo {
   final int socket;
 
   final String vendor;
+}
 
-  ProcessorInfo(
-      {this.architecture = ProcessorArchitecture.UNKNOWN,
+/// Describes a processor core.
+class CoreInfo {
+  CoreInfo(
+      {this.architecture = ProcessorArchitecture.unknown,
       this.name = '',
       this.socket = 0,
       this.vendor = ''});
+
+  final ProcessorArchitecture architecture;
+
+  final String name;
+
+  final int socket;
+
+  final String vendor;
 }
 
 abstract class SysInfo {
+  SysInfo._internal();
+
   /// Returns the architecture of the kernel.
   ///
   ///     print(SysInfo.kernelArchitecture);
@@ -80,7 +128,23 @@ abstract class SysInfo {
   ///
   ///     print(SysInfo.processors.first.vendor);
   ///     => GenuineIntel
-  static final List<ProcessorInfo> processors = _getProcessors();
+  @Deprecated('Use cores')
+  static List<ProcessorInfo> get processors {
+    final cores = _getCores();
+    return cores
+        .map((core) => ProcessorInfo(
+            architecture: core.architecture,
+            name: core.name,
+            socket: core.socket,
+            vendor: core.vendor))
+        .toList();
+  }
+
+  /// Returns the information about the processors.
+  ///
+  ///     print(SysInfo.processors.first.vendor);
+  ///     => GenuineIntel
+  static final List<CoreInfo> cores = _getCores();
 
   /// Returns the path of user home directory.
   ///
@@ -109,8 +173,6 @@ abstract class SysInfo {
   static final Map<String, String> _environment = Platform.environment;
 
   static final String _operatingSystem = Platform.operatingSystem;
-
-  SysInfo._internal();
 
   /// Returns the amount of free physical memory in bytes.
   ///
@@ -142,9 +204,7 @@ abstract class SysInfo {
   ///     => 123456
   static int getVirtualMemorySize() => _getVirtualMemorySize();
 
-  static ProcessorInfo _createUnknownProcessor() {
-    return ProcessorInfo(architecture: ProcessorArchitecture.UNKNOWN);
-  }
+  static CoreInfo _createUnknownProcessor() => CoreInfo();
 
   static Never _error() {
     throw UnsupportedError('Unsupported operating system.');
@@ -248,9 +308,9 @@ abstract class SysInfo {
 
         paths.add('/lib');
         paths.add('/lib64');
-        for (var path in paths) {
+        for (final path in paths) {
           final files = FileUtils.glob(pathos.join(path, 'libc.so.*'));
-          for (var filePath in files) {
+          for (final filePath in files) {
             final resolvedFilePath = _resolveLink(filePath);
             if (resolvedFilePath == null) {
               continue;
@@ -361,11 +421,11 @@ abstract class SysInfo {
     }
   }
 
-  static List<ProcessorInfo> _getProcessors() {
+  static List<CoreInfo> _getCores() {
     switch (_operatingSystem) {
       case 'android':
       case 'linux':
-        final processors = <ProcessorInfo>[];
+        final cores = <CoreInfo>[];
         final groups = _fluent(_exec('cat', ['/proc/cpuinfo']))
             .trim()
             .stringToList()
@@ -405,9 +465,9 @@ abstract class SysInfo {
           }
 
           var vendor = _fluent(group['vendor_id']).stringValue;
-          final modelFields = const <String>['model name', 'cpu model'];
+          const modelFields = <String>['model name', 'cpu model'];
           String? name = '';
-          for (var field in modelFields) {
+          for (final field in modelFields) {
             name = _fluent(group[field]).stringValue;
             if (name.isNotEmpty) {
               break;
@@ -418,33 +478,33 @@ abstract class SysInfo {
             name = processorName;
           }
 
-          var architecture = ProcessorArchitecture.UNKNOWN;
+          var architecture = ProcessorArchitecture.unknown;
           if (name!.startsWith('AMD')) {
-            architecture = ProcessorArchitecture.X86;
+            architecture = ProcessorArchitecture.x86;
             final flags = _fluent(group['flags']).split(' ').listValue;
             if (flags.contains('lm')) {
-              architecture = ProcessorArchitecture.X86_64;
+              architecture = ProcessorArchitecture.x86_64;
             }
           } else if (name.startsWith('Intel')) {
-            architecture = ProcessorArchitecture.X86;
+            architecture = ProcessorArchitecture.x86;
             final flags = _fluent(group['flags']).split(' ').listValue;
             if (flags.contains('lm')) {
-              architecture = ProcessorArchitecture.X86_64;
+              architecture = ProcessorArchitecture.x86_64;
             }
 
             if (flags.contains('ia64')) {
-              architecture = ProcessorArchitecture.IA64;
+              architecture = ProcessorArchitecture.ia64;
             }
           } else if (name.startsWith('ARM')) {
-            architecture = ProcessorArchitecture.ARM;
+            architecture = ProcessorArchitecture.arm;
             final features = _fluent(group['Features']).split(' ').listValue;
             if (features.contains('fp')) {
-              architecture = ProcessorArchitecture.AARCH64;
+              architecture = ProcessorArchitecture.aarch64;
             }
           } else if (name.toUpperCase().startsWith('AARCH64')) {
-            architecture = ProcessorArchitecture.AARCH64;
+            architecture = ProcessorArchitecture.aarch64;
           } else if (name.startsWith('MIPS')) {
-            architecture = ProcessorArchitecture.MIPS;
+            architecture = ProcessorArchitecture.mips;
           }
 
           if (vendor.isEmpty) {
@@ -456,45 +516,42 @@ abstract class SysInfo {
             }
           }
 
-          final processor = ProcessorInfo(
+          final processor = CoreInfo(
               architecture: architecture,
               name: name,
               socket: socket,
               vendor: vendor);
-          processors.add(processor);
+          cores.add(processor);
         }
 
-        if (processors.isEmpty) {
-          processors.add(_createUnknownProcessor());
+        if (cores.isEmpty) {
+          cores.add(_createUnknownProcessor());
         }
 
-        return UnmodifiableListView(processors);
+        return UnmodifiableListView(cores);
       case 'macos':
         final data = _fluent(_exec('sysctl', ['machdep.cpu']))
             .trim()
             .stringToMap(':')
             .mapValue;
-        var architecture = ProcessorArchitecture.UNKNOWN;
+        var architecture = ProcessorArchitecture.unknown;
         if (data['machdep.cpu.vendor'] == 'GenuineIntel') {
-          architecture = ProcessorArchitecture.X86;
+          architecture = ProcessorArchitecture.x86;
           final extfeatures =
               _fluent(data['machdep.cpu.extfeatures']).split(' ').listValue;
           if (extfeatures.contains('EM64T')) {
-            architecture = ProcessorArchitecture.X86_64;
+            architecture = ProcessorArchitecture.x86_64;
           }
         }
 
         final numberOfCores =
             _fluent(data['machdep.cpu.core_count']).parseInt().intValue;
-        final processors = <ProcessorInfo>[];
+        final processors = <CoreInfo>[];
         for (var i = 0; i < numberOfCores; i++) {
           final name = _fluent(data['machdep.cpu.brand_string']).stringValue;
           final vendor = _fluent(data['machdep.cpu.vendor']).stringValue;
-          final processor = ProcessorInfo(
-              architecture: architecture,
-              name: name,
-              socket: 0,
-              vendor: vendor);
+          final processor =
+              CoreInfo(architecture: architecture, name: name, vendor: vendor);
           processors.add(processor);
         }
 
@@ -512,52 +569,52 @@ abstract class SysInfo {
           'NumberOfCores'
         ])!;
         final numberOfSockets = groups.length;
-        final processors = <ProcessorInfo>[];
+        final cores = <CoreInfo>[];
         for (var i = 0; i < numberOfSockets; i++) {
           final data = groups[i];
           final numberOfCores =
               _fluent(data['NumberOfCores']).parseInt().intValue;
-          var architecture = ProcessorArchitecture.UNKNOWN;
+          var architecture = ProcessorArchitecture.unknown;
           switch (_fluent(data['Architecture']).parseInt().intValue) {
             case 0:
-              architecture = ProcessorArchitecture.X86;
+              architecture = ProcessorArchitecture.x86;
               break;
             case 1:
-              architecture = ProcessorArchitecture.MIPS;
+              architecture = ProcessorArchitecture.mips;
               break;
             case 5:
               switch (_fluent(data['DataWidth']).parseInt().intValue) {
                 case 32:
-                  architecture = ProcessorArchitecture.ARM;
+                  architecture = ProcessorArchitecture.arm;
                   break;
                 case 64:
-                  architecture = ProcessorArchitecture.AARCH64;
+                  architecture = ProcessorArchitecture.aarch64;
                   break;
               }
 
               break;
             case 9:
-              architecture = ProcessorArchitecture.X86_64;
+              architecture = ProcessorArchitecture.x86_64;
               break;
           }
 
           for (var socket = 0; socket < numberOfCores; socket++) {
             final name = _fluent(data['Name']).stringValue;
             final vendor = _fluent(data['Manufacturer']).stringValue;
-            final processor = ProcessorInfo(
+            final core = CoreInfo(
                 architecture: architecture,
                 name: name,
                 socket: socket,
                 vendor: vendor);
-            processors.add(processor);
+            cores.add(core);
           }
         }
 
-        if (processors.isEmpty) {
-          processors.add(_createUnknownProcessor());
+        if (cores.isEmpty) {
+          cores.add(_createUnknownProcessor());
         }
 
-        return UnmodifiableListView(processors);
+        return UnmodifiableListView(cores);
       default:
         _error();
     }
@@ -673,7 +730,7 @@ abstract class SysInfo {
         return _fluent(_exec('id', ['-u'])).trim().stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('UserAccount', ['SID'],
-            where: ['Name=\'$userName\''])!;
+            where: ["Name='$userName'"])!;
         return _fluent(data['SID']).stringValue;
       default:
         _error();
@@ -688,7 +745,7 @@ abstract class SysInfo {
         return _fluent(_exec('whoami', [])).trim().stringValue;
       case 'windows':
         final data = _wmicGetValueAsMap('ComputerSystem', ['UserName'])!;
-        return _fluent(data['UserName']).split('\\').last().stringValue;
+        return _fluent(data['UserName']).split(r'\').last().stringValue;
       default:
         _error();
     }
@@ -742,7 +799,7 @@ abstract class SysInfo {
         return size * 1024;
       case 'windows':
         final data = _wmicGetValueAsMap('Process', ['VirtualSize'],
-            where: ['Handle=\'$pid\''])!;
+            where: ["Handle='$pid'"])!;
         final value = _fluent(data['VirtualSize']).parseInt().intValue;
         return value;
       default:

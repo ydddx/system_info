@@ -1,4 +1,6 @@
-part of system_info;
+// ignore_for_file: avoid_catches_without_on_clauses
+
+part of system_info2;
 
 String? _exec(String executable, List<String> arguments,
     {bool runInShell = false}) {
@@ -22,6 +24,7 @@ String? _resolveLink(String path) {
     }
 
     try {
+      // ignore: parameter_assignments
       path = Link(path).resolveSymbolicLinksSync();
     } catch (e) {
       return null;
@@ -65,7 +68,7 @@ void _parseLdConf(String path, List<String> paths, Set<String> processed) {
     }
 
     if (include) {
-      for (var path in FileUtils.glob(line)) {
+      for (final path in FileUtils.glob(line)) {
         if (!processed.contains(path)) {
           processed.add(path);
           _parseLdConf(path, paths, processed);
@@ -81,13 +84,15 @@ String? _wmicGetValue(String section, List<String> fields,
     {List<String>? where}) {
   final arguments = <String>[section];
   if (where != null) {
-    arguments.add('where');
-    arguments.addAll(where);
+    arguments
+      ..add('where')
+      ..addAll(where);
   }
 
-  arguments.add('get');
-  arguments.addAll(fields.join(', ').split(' '));
-  arguments.add('/VALUE');
+  arguments
+    ..add('get')
+    ..addAll(fields.join(', ').split(' '))
+    ..add('/VALUE');
   return _exec('wmic', arguments);
 }
 

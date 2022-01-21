@@ -1,4 +1,4 @@
-library system_info;
+library system_info2;
 
 import 'dart:collection';
 import 'dart:io';

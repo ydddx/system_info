@@ -11,24 +11,24 @@ void main() {
   print('User id                 : ${SysInfo.userId}');
   print('User name               : ${SysInfo.userName}');
   print('User space bitness      : ${SysInfo.userSpaceBitness}');
-  final processors = SysInfo.processors;
-  print('Number of processors    : ${processors.length}');
-  for (var processor in processors) {
-    print('  Architecture          : ${processor.architecture}');
-    print('  Name                  : ${processor.name}');
-    print('  Socket                : ${processor.socket}');
-    print('  Vendor                : ${processor.vendor}');
+  final cores = SysInfo.cores;
+  print('Number of core    : ${cores.length}');
+  for (final core in cores) {
+    print('  Architecture          : ${core.architecture}');
+    print('  Name                  : ${core.name}');
+    print('  Socket                : ${core.socket}');
+    print('  Vendor                : ${core.vendor}');
   }
-  print(
-      'Total physical memory   : ${SysInfo.getTotalPhysicalMemory() ~/ MEGABYTE} MB');
-  print(
-      'Free physical memory    : ${SysInfo.getFreePhysicalMemory() ~/ MEGABYTE} MB');
-  print(
-      'Total virtual memory    : ${SysInfo.getTotalVirtualMemory() ~/ MEGABYTE} MB');
-  print(
-      'Free virtual memory     : ${SysInfo.getFreeVirtualMemory() ~/ MEGABYTE} MB');
-  print(
-      'Virtual memory size     : ${SysInfo.getVirtualMemorySize() ~/ MEGABYTE} MB');
+  print('Total physical memory   '
+      ': ${SysInfo.getTotalPhysicalMemory() ~/ megaByte} MB');
+  print('Free physical memory    '
+      ': ${SysInfo.getFreePhysicalMemory() ~/ megaByte} MB');
+  print('Total virtual memory    '
+      ': ${SysInfo.getTotalVirtualMemory() ~/ megaByte} MB');
+  print('Free virtual memory     '
+      ': ${SysInfo.getFreeVirtualMemory() ~/ megaByte} MB');
+  print('Virtual memory size     '
+      ': ${SysInfo.getVirtualMemorySize() ~/ megaByte} MB');
 }
 
-const int MEGABYTE = 1024 * 1024;
+const int megaByte = 1024 * 1024;
