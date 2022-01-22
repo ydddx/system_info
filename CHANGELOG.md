@@ -1,3 +1,7 @@
+# 2.0.3
+- removed trailing slashes of homepage and documenation.
+- fix of the readme.
+
 # 2.0.2
 - released the manual and updated the readme to point to it.
 - made processors redundant and replaced with cores. 
