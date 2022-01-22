@@ -1,7 +1,7 @@
 name: system_info2
 version: 2.0.2
-homepage: https://sysinfo.onepub.dev/
-documentation: https://sysinfo.onepub.dev/
+homepage: https://sysinfo.onepub.dev
+documentation: https://sysinfo.onepub.dev
 repository: https://github.com/onepub-dev/system_info
 description: Provides easy access to useful information about the system (architecture, bitness, kernel, memory, operating system, CPU, user).
 environment: 
