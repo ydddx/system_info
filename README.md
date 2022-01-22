@@ -9,7 +9,7 @@ Provides easy access to useful information about the system (architecture, bitne
 
 system_info2 lets you discover specific hardware characteristics of the OS you are running on includeing:
 
-* kernelArchitecture}');
+* kernelArchitecture
 * Kernel bitness          
 * Kernel name             
 * Kernel version          
