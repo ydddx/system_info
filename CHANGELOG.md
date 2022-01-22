@@ -1,3 +1,8 @@
+# 2.0.2
+- released the manual and updated the readme to point to it.
+- made processors redundant and replaced with cores. 
+- Applied lint hard and fixed incorrect camel case usage.
+
 # 2.0.1
 Acknowledged onepub.dev's support.
 
