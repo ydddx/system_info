@@ -217,7 +217,7 @@ abstract class SysInfo {
         final data = (_fluent(_exec('cat', ['/proc/meminfo']))
           ..trim()
           ..stringToMap(':'))
-          ..mapValue;
+          .mapValue;
         final value = (_fluent(data['MemFree'])
               ..split(' ')
               ..elementAt(0)
