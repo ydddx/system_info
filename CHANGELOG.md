@@ -1,3 +1,6 @@
+# 2.0.4
+- fixed getFreePhysicalMemory - big thanks to @jingluoguo for the patch
+
 # 2.0.3
 - removed trailing slashes of homepage and documenation.
 - fix of the readme.

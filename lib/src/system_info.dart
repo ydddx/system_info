@@ -215,9 +215,9 @@ abstract class SysInfo {
       case 'android':
       case 'linux':
         final data = (_fluent(_exec('cat', ['/proc/meminfo']))
-          ..trim()
-          ..stringToMap(':'))
-          .mapValue;
+              ..trim()
+              ..stringToMap(':'))
+            .mapValue;
         final value = (_fluent(data['MemFree'])
               ..split(' ')
               ..elementAt(0)
